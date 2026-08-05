@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getAllQuestionSummaries, type QuestionSummary } from "@/lib/questions";
+import { getAllQuestionStates, type QuestionState } from "@/lib/store/db";
 import { DifficultyBadge, TopicChip } from "@/components/ui";
 
 type DifficultyFilter = "all" | "easy" | "medium" | "hard";
@@ -11,11 +12,14 @@ const DIFFICULTIES: DifficultyFilter[] = ["all", "easy", "medium", "hard"];
 
 export default function QuestionsPage() {
   const [questions, setQuestions] = useState<QuestionSummary[]>([]);
+  const [states, setStates] = useState<Record<string, QuestionState>>({});
 
   useEffect(() => {
     let active = true;
-    void getAllQuestionSummaries().then((qs) => {
-      if (active) setQuestions(qs);
+    void Promise.all([getAllQuestionSummaries(), getAllQuestionStates()]).then(([qs, s]) => {
+      if (!active) return;
+      setQuestions(qs);
+      setStates(s);
     });
     return () => {
       active = false;
@@ -44,20 +48,25 @@ export default function QuestionsPage() {
     });
   }, [questions, query, difficulty, topic]);
 
+  const done = questions.filter((item) => states[item.id]?.completed).length;
+
   return (
-    <main className="mx-auto max-w-6xl px-4 py-10">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-          Questions
-        </h1>
-        <p className="mt-1 text-slate-600 dark:text-slate-300">
-          {questions.length} interview questions covering joins, aggregation, window functions, and
-          more.
+    <main className="grain mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <header className="mb-10 max-w-2xl">
+        <p className="text-accent mb-3 text-xs font-semibold tracking-widest uppercase">
+          The catalogue
+        </p>
+        <h1 className="text-foreground text-4xl font-bold tracking-tight">Questions</h1>
+        <p className="text-muted-foreground mt-3">
+          {questions.length} questions, ordered from easy to hard.{" "}
+          {done > 0
+            ? `${done} completed in this browser.`
+            : "Nothing completed yet — start with an easy one."}
         </p>
       </header>
 
       {/* Filters */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
         <label className="sr-only" htmlFor="search">
           Search questions
         </label>
@@ -67,22 +76,22 @@ export default function QuestionsPage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by title or keyword…"
-          className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none sm:w-72 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+          className="border-border bg-surface text-foreground placeholder:text-muted focus:border-accent w-full rounded-lg border px-3.5 py-2 text-sm sm:w-72"
         />
         <div
           role="group"
           aria-label="Filter by difficulty"
-          className="flex overflow-hidden rounded-md ring-1 ring-slate-200 ring-inset dark:ring-slate-700"
+          className="ring-border-strong flex overflow-hidden rounded-lg ring-1 ring-inset"
         >
           {DIFFICULTIES.map((d) => (
             <button
               key={d}
               onClick={() => setDifficulty(d)}
               aria-pressed={difficulty === d}
-              className={`px-3 py-2 text-xs font-medium capitalize transition-colors ${
+              className={`px-3.5 py-2 text-xs font-semibold capitalize transition-colors duration-150 ${
                 difficulty === d
-                  ? "bg-indigo-600 text-white"
-                  : "bg-white text-slate-600 hover:bg-slate-100 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-800"
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-surface text-muted-foreground hover:bg-surface-muted hover:text-foreground"
               }`}
             >
               {d}
@@ -96,7 +105,7 @@ export default function QuestionsPage() {
           id="topic-filter"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+          className="border-border bg-surface text-foreground focus:border-accent rounded-lg border px-3.5 py-2 text-sm"
         >
           <option value="all">All topics</option>
           {topics.map((t) => (
@@ -109,17 +118,16 @@ export default function QuestionsPage() {
 
       {/* Grid */}
       {questions.length === 0 ? (
-        <p className="py-12 text-center text-slate-500 dark:text-slate-400" aria-busy="true">
-          Loading questions…
-        </p>
+        <div className="py-20 text-center" aria-busy="true">
+          <div className="bg-surface-muted mx-auto h-8 w-48 animate-pulse rounded" />
+          <div className="bg-surface-muted mx-auto mt-4 h-3 w-64 animate-pulse rounded" />
+        </div>
       ) : filtered.length === 0 ? (
-        <p className="py-12 text-center text-slate-500 dark:text-slate-400">
-          No questions match your filters.
-        </p>
+        <p className="text-muted-foreground py-20 text-center">No questions match your filters.</p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((q) => (
-            <QuestionCard key={q.slug} question={q} />
+            <QuestionCard key={q.slug} question={q} completed={!!states[q.id]?.completed} />
           ))}
         </ul>
       )}
@@ -127,24 +135,29 @@ export default function QuestionsPage() {
   );
 }
 
-function QuestionCard({ question }: { question: QuestionSummary }) {
+function QuestionCard({ question, completed }: { question: QuestionSummary; completed: boolean }) {
   return (
-    <li>
+    <li className="h-full">
       <Link
         href={`/questions/${question.slug}`}
-        className="group flex h-full flex-col rounded-xl border border-slate-200 p-5 transition-colors hover:border-indigo-300 hover:bg-slate-50/60 dark:border-slate-800 dark:hover:border-indigo-700 dark:hover:bg-slate-900/40"
+        className="group border-border bg-surface shadow-tinted hover:border-border-strong flex h-full flex-col rounded-xl border p-5 transition-all duration-200 hover:-translate-y-0.5"
       >
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-2 flex items-center justify-between gap-2">
           <DifficultyBadge difficulty={question.difficulty} />
+          {completed ? (
+            <span className="text-success inline-flex items-center gap-1 text-xs font-medium">
+              <span aria-hidden>✓</span> completed
+            </span>
+          ) : (
+            <span className="text-muted text-xs">not started</span>
+          )}
         </div>
-        <h2 className="font-semibold text-slate-900 group-hover:text-indigo-600 dark:text-slate-100 dark:group-hover:text-indigo-400">
-          {question.title}
-        </h2>
-        <p className="mt-1 flex-1 text-sm text-slate-600 dark:text-slate-300">
+        <h2 className="text-foreground group-hover:text-accent font-semibold">{question.title}</h2>
+        <p className="text-muted-foreground mt-1.5 flex-1 text-sm leading-relaxed">
           {question.description}
         </p>
-        <div className="mt-3 flex flex-wrap gap-1">
-          {question.topics.map((t) => (
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {question.topics.slice(0, 3).map((t) => (
             <TopicChip key={t} topic={t} />
           ))}
         </div>

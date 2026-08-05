@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { QuestionPackage } from "@/content/types";
 import { MAX_RESULT_ROWS, DEFAULT_QUERY_TIMEOUT_MS } from "@/lib/constants";
 import { createSqliteClient, SqliteWorkerClient } from "@/lib/worker";
@@ -33,10 +34,13 @@ type EngineStatus = "initializing" | "ready" | "error";
 
 interface WorkspaceProps {
   question: QuestionPackage;
+  /** Next question in the learning path (easy → medium → hard), if any. */
+  nextSlug: string | null;
 }
 
-export function SqlWorkspace({ question }: WorkspaceProps) {
+export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
   const { metadata } = question;
+  const router = useRouter();
 
   const [editorValue, setEditorValue] = useState<string>(question.starterSql);
   const [engine, setEngine] = useState<EngineStatus>("initializing");
@@ -208,20 +212,22 @@ export function SqlWorkspace({ question }: WorkspaceProps) {
     setBookmarked(next);
   }, [metadata.id]);
 
+  const goToNext = useCallback(() => {
+    if (nextSlug) router.push(`/practice/${nextSlug}`);
+  }, [nextSlug, router]);
+
   if (engine === "error") {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 p-8 text-center">
-        <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-          SQLite engine failed to start
-        </p>
-        <p className="max-w-md text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-foreground text-lg font-semibold">SQLite engine failed to start</p>
+        <p className="text-muted-foreground max-w-md text-sm">
           This app needs WebAssembly and Web Workers. Your browser may block them, or the WASM file
           failed to load.
         </p>
-        <p className="max-w-md font-mono text-xs break-all text-rose-500">{engineErrorMessage}</p>
+        <p className="text-danger max-w-md font-mono text-xs break-all">{engineErrorMessage}</p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+          className="bg-accent text-accent-foreground hover:bg-accent-strong mt-2 rounded-md px-4 py-2 text-sm font-medium transition-colors"
         >
           Reload
         </button>
@@ -232,49 +238,47 @@ export function SqlWorkspace({ question }: WorkspaceProps) {
   return (
     <div className="flex h-[calc(100dvh-3.5rem)] flex-col">
       {/* Top bar */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 bg-white px-4 py-2 dark:border-slate-800 dark:bg-slate-950">
+      <div className="border-border bg-surface flex flex-wrap items-center gap-x-3 gap-y-2 border-b px-4 py-2">
         <Link
           href={`/questions/${metadata.slug}`}
-          className="text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+          className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
         >
           ← Question
         </Link>
-        <span className="mx-1 h-4 w-px bg-slate-200 dark:bg-slate-700" aria-hidden />
-        <h1 className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
-          {metadata.title}
-        </h1>
+        <span className="bg-border-strong h-4 w-px" aria-hidden />
+        <h1 className="text-foreground truncate text-sm font-semibold">{metadata.title}</h1>
         <DifficultyBadge difficulty={metadata.difficulty} />
         <button
           onClick={handleToggleBookmark}
           aria-pressed={bookmarked}
-          className="ml-1 rounded-md px-2 py-1 text-sm text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+          className="text-muted hover:bg-surface-muted hover:text-foreground rounded-md px-1.5 py-1 text-sm transition-colors"
         >
           {bookmarked ? "★" : "☆"}
           <span className="sr-only">{bookmarked ? "Remove bookmark" : "Bookmark"}</span>
         </button>
 
         <div className="ml-auto flex items-center gap-2">
-          <span className="hidden text-xs text-slate-400 sm:inline">
+          <span className="text-muted hidden text-xs sm:inline">
             {engine === "ready" ? "SQLite ready" : "Initializing…"}
           </span>
           <button
             onClick={handleReset}
             disabled={running || engine !== "ready"}
-            className="rounded-md px-3 py-1.5 text-sm font-medium ring-1 ring-slate-200 ring-inset hover:bg-slate-100 disabled:opacity-50 dark:ring-slate-700 dark:hover:bg-slate-800"
+            className="text-muted-foreground ring-border-strong hover:bg-surface-muted hover:text-foreground rounded-md px-3 py-1.5 text-sm font-medium ring-1 transition-all duration-150 ring-inset active:scale-[0.98] disabled:opacity-50"
           >
             Reset
           </button>
           <button
             onClick={handleRun}
             disabled={running || engine !== "ready"}
-            className="rounded-md bg-slate-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+            className="bg-foreground text-background rounded-md px-4 py-1.5 text-sm font-semibold transition-all duration-150 hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
           >
             {running ? "Running…" : "Run ▸"}
           </button>
           <button
             onClick={handleSubmit}
             disabled={running || engine !== "ready"}
-            className="rounded-md bg-indigo-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
+            className="bg-accent text-accent-foreground hover:bg-accent-strong rounded-md px-4 py-1.5 text-sm font-semibold transition-all duration-150 active:scale-[0.98] disabled:opacity-50"
           >
             Submit
           </button>
@@ -284,11 +288,11 @@ export function SqlWorkspace({ question }: WorkspaceProps) {
       {/* Body */}
       <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(280px,340px)_1fr]">
         {/* Left panel */}
-        <aside className="min-h-0 overflow-y-auto border-b border-slate-200 bg-slate-50/60 lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-slate-900/40">
-          <section className="border-b border-slate-200 p-4 dark:border-slate-800">
+        <aside className="border-border bg-surface min-h-0 overflow-y-auto border-b lg:border-r lg:border-b-0">
+          <section className="border-border border-b p-5">
             <Markdown source={question.promptMdx} />
           </section>
-          <section className="border-b border-slate-200 dark:border-slate-800">
+          <section className="border-border border-b">
             <SchemaExplorer
               tables={tables}
               onPreviewTable={(tableName, limit) => {
@@ -298,9 +302,9 @@ export function SqlWorkspace({ question }: WorkspaceProps) {
               }}
             />
           </section>
-          <section className="p-4">
+          <section className="p-5">
             <label
-              className="mb-1 block text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400"
+              className="text-muted mb-1.5 block text-xs font-semibold tracking-widest uppercase"
               htmlFor="question-notes"
             >
               Notes
@@ -311,14 +315,14 @@ export function SqlWorkspace({ question }: WorkspaceProps) {
               onChange={(e) => handleNotesChange(e.target.value)}
               placeholder="Your private notes for this question…"
               rows={4}
-              className="w-full resize-y rounded-md border border-slate-200 bg-white p-2 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+              className="border-border bg-surface-muted text-foreground placeholder:text-muted focus:border-accent w-full resize-y rounded-md border p-2.5 text-sm focus:outline-none"
             />
           </section>
         </aside>
 
         {/* Main panel */}
-        <main className="flex min-h-0 flex-col">
-          <div className="min-h-0 flex-1 border-b border-slate-200 dark:border-slate-800">
+        <main className="bg-surface flex min-h-0 flex-col">
+          <div className="border-border min-h-0 flex-1 border-b">
             <SqlEditor
               value={editorValue}
               onChange={handleEditorChange}
@@ -328,7 +332,7 @@ export function SqlWorkspace({ question }: WorkspaceProps) {
           </div>
 
           <div className="flex flex-col">
-            <div className="h-52 shrink-0 border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <div className="border-border bg-surface h-52 shrink-0 border-b">
               {runError ? (
                 <ResultsError message={runError} />
               ) : results ? (
@@ -342,7 +346,12 @@ export function SqlWorkspace({ question }: WorkspaceProps) {
               )}
             </div>
             <div className="px-4 py-2.5">
-              <SubmissionPanel status={submission} result={validation} />
+              <SubmissionPanel
+                status={submission}
+                result={validation}
+                nextSlug={nextSlug}
+                onNext={goToNext}
+              />
             </div>
           </div>
         </main>

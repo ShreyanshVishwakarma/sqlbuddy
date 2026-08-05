@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { loadQuestion } from "@/content/loader";
 import { nodeLoader } from "@/content/node-loader";
+import { getNextQuestionSlug } from "@/lib/questions";
 import { QUESTION_SLUGS } from "@/lib/constants";
 import { PracticeWorkspace } from "@/features/workspace/practice-workspace";
 
@@ -35,5 +36,8 @@ export default async function PracticePage({ params }: PracticePageProps) {
   }
   if (!question) notFound();
 
-  return <PracticeWorkspace question={question} />;
+  // The learning path (easy → medium → hard) for the "next question" flow.
+  const nextSlug = await getNextQuestionSlug(slug);
+
+  return <PracticeWorkspace question={question} nextSlug={nextSlug} />;
 }

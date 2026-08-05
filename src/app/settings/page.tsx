@@ -26,17 +26,16 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-        Settings
-      </h1>
-      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-        All settings are stored locally in your browser. No account, no sync.
+    <main className="grain mx-auto max-w-2xl px-4 py-12 sm:px-6">
+      <p className="text-accent mb-3 text-xs font-semibold tracking-widest uppercase">Settings</p>
+      <h1 className="text-foreground text-4xl font-bold tracking-tight">Preferences</h1>
+      <p className="text-muted-foreground mt-3 text-sm">
+        Everything here is stored locally in your browser. No account, no sync.
       </p>
 
       {/* Theme */}
-      <section className="mt-8 rounded-xl border border-slate-200 p-6 dark:border-slate-800">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Appearance</h2>
+      <section className="border-border bg-surface shadow-tinted mt-10 rounded-xl border p-6">
+        <h2 className="text-foreground text-lg font-semibold tracking-tight">Appearance</h2>
         <div role="radiogroup" aria-label="Theme" className="mt-4 grid gap-3 sm:grid-cols-3">
           {options.map((opt) => (
             <button
@@ -44,27 +43,23 @@ export default function SettingsPage() {
               role="radio"
               aria-checked={theme === opt.value}
               onClick={() => setTheme(opt.value)}
-              className={`rounded-lg border p-4 text-left transition-colors ${
+              className={`rounded-lg p-4 text-left transition-all duration-150 ${
                 theme === opt.value
-                  ? "border-indigo-500 bg-indigo-50/60 dark:bg-indigo-950/40"
-                  : "border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600"
+                  ? "bg-accent-soft ring-accent ring-2"
+                  : "bg-surface-muted ring-border hover:ring-border-strong ring-1 ring-inset"
               }`}
             >
-              <span className="block text-sm font-medium text-slate-900 dark:text-slate-100">
-                {opt.label}
-              </span>
-              <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
-                {opt.hint}
-              </span>
+              <span className="text-foreground block text-sm font-medium">{opt.label}</span>
+              <span className="text-muted-foreground mt-0.5 block text-xs">{opt.hint}</span>
             </button>
           ))}
         </div>
       </section>
 
       {/* Data */}
-      <section className="mt-6 rounded-xl border border-rose-200 p-6 dark:border-rose-900">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Local data</h2>
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+      <section className="border-danger/30 bg-danger-soft mt-6 rounded-xl border p-6">
+        <h2 className="text-danger text-lg font-semibold tracking-tight">Local data</h2>
+        <p className="text-muted-foreground mt-1 text-sm">
           Deletes all drafts, progress, bookmarks, notes, and settings from this browser. This
           cannot be undone.
         </p>
@@ -85,10 +80,7 @@ export default function SettingsPage() {
           )}
         </div>
         {cleared && (
-          <p
-            role="status"
-            className="mt-3 text-sm font-medium text-emerald-600 dark:text-emerald-400"
-          >
+          <p role="status" className="text-success mt-3 text-sm font-medium">
             All local data cleared.
           </p>
         )}

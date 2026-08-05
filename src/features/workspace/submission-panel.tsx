@@ -7,18 +7,25 @@ export type SubmissionStatus = "idle" | "evaluating" | "passed" | "failed";
 interface SubmissionPanelProps {
   status: SubmissionStatus;
   result: ValidationResult | null;
+  /** Slug of the next question in the learning path, if any. */
+  nextSlug?: string | null;
+  onNext?: () => void;
 }
 
 /**
  * Shows the current submission state. After evaluation, reports only the number of
- * fixtures passed — never the hidden fixture contents.
+ * fixtures passed — never the hidden fixture contents. On a pass, offers to jump
+ * straight to the next question in the learning path.
  */
-export function SubmissionPanel({ status, result }: SubmissionPanelProps) {
+export function SubmissionPanel({ status, result, nextSlug, onNext }: SubmissionPanelProps) {
   if (status === "idle") {
     return (
-      <div className="flex items-center gap-2 rounded-lg border border-dashed border-slate-300 px-3 py-2.5 text-sm text-slate-500 dark:border-slate-600 dark:text-slate-400">
-        <span aria-hidden>○</span> Not submitted yet. Press{" "}
-        <kbd className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-800">
+      <div className="border-border-strong text-muted-foreground flex items-center gap-2 rounded-lg border border-dashed px-3 py-2.5 text-sm">
+        <span aria-hidden className="text-muted">
+          ○
+        </span>
+        Not submitted yet. Press{" "}
+        <kbd className="bg-surface-muted text-foreground ring-border-strong rounded px-1.5 py-0.5 font-mono text-xs ring-1 ring-inset">
           Ctrl/⌘ + Shift + Enter
         </kbd>{" "}
         to check your answer.
@@ -28,12 +35,12 @@ export function SubmissionPanel({ status, result }: SubmissionPanelProps) {
 
   if (status === "evaluating") {
     return (
-      <div className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300">
+      <div className="border-border text-muted-foreground flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm">
         <span
-          className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent"
+          className="border-accent h-3.5 w-3.5 animate-spin rounded-full border-2 border-t-transparent"
           aria-hidden
         />
-        Evaluating your answer against hidden test fixtures…
+        Evaluating your answer against hidden fixtures…
       </div>
     );
   }
@@ -42,10 +49,21 @@ export function SubmissionPanel({ status, result }: SubmissionPanelProps) {
     return (
       <div
         role="status"
-        className="flex items-center gap-2 rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2.5 text-sm font-medium text-emerald-800 dark:border-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300"
+        className="border-success/30 bg-success-soft flex flex-wrap items-center justify-between gap-3 rounded-lg border px-3 py-2.5"
       >
-        <span aria-hidden>✓</span> Passed — your query matches the reference on all{" "}
-        {result?.totalCount ?? 0} fixtures.
+        <p className="text-success flex items-center gap-2 text-sm font-medium">
+          <span aria-hidden>✓</span>
+          Passed — matches the reference on all {result?.totalCount ?? 0} fixtures.
+        </p>
+        {nextSlug && (
+          <button
+            onClick={onNext}
+            className="bg-success inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+          >
+            Next question
+            <span aria-hidden>→</span>
+          </button>
+        )}
       </div>
     );
   }
@@ -53,7 +71,7 @@ export function SubmissionPanel({ status, result }: SubmissionPanelProps) {
   return (
     <div
       role="alert"
-      className="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2.5 text-sm text-rose-800 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-300"
+      className="border-danger/30 bg-danger-soft text-danger rounded-lg border px-3 py-2.5 text-sm"
     >
       <p className="font-medium">
         <span aria-hidden>✕</span> Not quite — {result?.passedCount ?? 0} of{" "}

@@ -10,10 +10,10 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
   loading: () => (
     <div className="flex h-full flex-col gap-2 p-4" aria-busy="true">
-      <div className="h-4 w-32 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-      <div className="h-3 w-full animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
-      <div className="h-3 w-4/5 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
-      <div className="h-3 w-2/3 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
+      <div className="bg-surface-muted h-4 w-32 animate-pulse rounded" />
+      <div className="bg-surface-muted h-3 w-full animate-pulse rounded" />
+      <div className="bg-surface-muted h-3 w-4/5 animate-pulse rounded" />
+      <div className="bg-surface-muted h-3 w-2/3 animate-pulse rounded" />
     </div>
   ),
 });

@@ -29,8 +29,8 @@ export function SchemaExplorer({ tables, onPreviewTable }: SchemaExplorerProps) 
   if (!tables) {
     return (
       <div className="flex flex-col gap-2 p-3" aria-busy="true">
-        <div className="h-3 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-        <div className="h-3 w-32 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
+        <div className="bg-surface-muted h-3 w-20 animate-pulse rounded" />
+        <div className="bg-surface-muted h-3 w-32 animate-pulse rounded" />
       </div>
     );
   }
@@ -61,7 +61,7 @@ export function SchemaExplorer({ tables, onPreviewTable }: SchemaExplorerProps) 
 
   return (
     <div className="p-3">
-      <h3 className="mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
+      <h3 className="text-muted mb-2 px-1 text-xs font-semibold tracking-widest uppercase">
         Schema
       </h3>
       <ul className="space-y-1">
@@ -69,11 +69,11 @@ export function SchemaExplorer({ tables, onPreviewTable }: SchemaExplorerProps) 
           <li key={table.name}>
             <button
               onClick={() => toggleTable(table.name)}
-              className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+              className="text-foreground hover:bg-surface-muted flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-sm transition-colors duration-150"
               aria-expanded={openTables.has(table.name)}
             >
               <span className="font-mono font-medium">{table.name}</span>
-              <span className="text-xs text-slate-400">{table.columns.length} cols</span>
+              <span className="text-muted text-xs tabular-nums">{table.columns.length} cols</span>
             </button>
             {openTables.has(table.name) && (
               <div className="mt-1 space-y-1 pl-3">
@@ -82,36 +82,37 @@ export function SchemaExplorer({ tables, onPreviewTable }: SchemaExplorerProps) 
                     key={col.name}
                     className="flex items-baseline justify-between gap-2 font-mono text-xs"
                   >
-                    <span className="text-slate-600 dark:text-slate-300">
+                    <span className="text-muted-foreground">
                       {col.name}
                       {col.pk && (
-                        <span className="ml-1 text-amber-500" title="Primary key">
+                        <span
+                          className="bg-warning/10 text-warning ml-1 rounded px-1 py-px text-[10px] font-semibold"
+                          title="Primary key"
+                        >
                           PK
                         </span>
                       )}
                     </span>
-                    <span className="text-slate-400 dark:text-slate-500">{col.type || "ANY"}</span>
+                    <span className="text-muted">{col.type || "ANY"}</span>
                   </div>
                 ))}
                 {preview?.table === table.name && preview.status === "loading" && (
-                  <div className="py-1 text-xs text-slate-400" aria-busy="true">
+                  <div className="text-muted py-1 text-xs" aria-busy="true">
                     Loading preview…
                   </div>
                 )}
                 {preview?.table === table.name && preview.status === "error" && (
-                  <div className="py-1 text-xs text-rose-500">
-                    Preview failed: {preview.message}
-                  </div>
+                  <div className="text-danger py-1 text-xs">Preview failed: {preview.message}</div>
                 )}
                 {preview?.table === table.name && preview.status === "loaded" && (
-                  <div className="mt-1 overflow-x-auto rounded-md ring-1 ring-slate-200 ring-inset dark:ring-slate-700">
-                    <table className="w-full border-collapse font-mono text-[11px]">
+                  <div className="ring-border mt-1 overflow-x-auto rounded-md ring-1 ring-inset">
+                    <table className="w-full border-collapse font-mono text-[11px] tabular-nums">
                       <thead>
                         <tr>
                           {preview.columns.map((c, i) => (
                             <th
                               key={i}
-                              className="border-b border-slate-200 bg-slate-50 px-1.5 py-1 text-left font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
+                              className="border-border bg-surface-muted text-muted-foreground border-b px-1.5 py-1 text-left font-medium"
                             >
                               {c}
                             </th>
@@ -124,10 +125,10 @@ export function SchemaExplorer({ tables, onPreviewTable }: SchemaExplorerProps) 
                             {row.map((cell, ci) => (
                               <td
                                 key={ci}
-                                className="border-b border-slate-100 px-1.5 py-0.5 text-slate-700 dark:border-slate-800 dark:text-slate-300"
+                                className="border-border/60 text-muted-foreground border-b px-1.5 py-0.5"
                               >
                                 {cell === null ? (
-                                  <span className="text-slate-400 italic">NULL</span>
+                                  <span className="text-muted italic">NULL</span>
                                 ) : (
                                   String(cell)
                                 )}

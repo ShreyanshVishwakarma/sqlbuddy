@@ -4,7 +4,7 @@ import { useMemo, type ReactNode } from "react";
 
 function CodeBlock({ children }: { children: ReactNode }) {
   return (
-    <pre className="my-3 overflow-x-auto rounded-lg bg-slate-950 p-3 text-xs leading-relaxed text-slate-100 ring-1 ring-slate-800 ring-inset">
+    <pre className="bg-code text-foreground ring-border-strong my-3 overflow-x-auto rounded-lg p-3 text-xs leading-relaxed ring-1 ring-inset">
       <code>{children}</code>
     </pre>
   );
@@ -119,7 +119,7 @@ function inline(text: string, key: number): ReactNode[] {
       out.push(
         <code
           key={`${key}-${idx}`}
-          className="rounded bg-slate-100 px-1 py-0.5 text-[0.85em] text-rose-600 dark:bg-slate-800 dark:text-rose-300"
+          className="bg-surface-muted text-accent rounded px-1 py-0.5 text-[0.85em]"
         >
           {part.slice(1, -1)}
         </code>,
@@ -144,17 +144,14 @@ function renderBlocks(source: string): ReactNode {
       case "table": {
         const [header, , ...rows] = block.rows;
         return (
-          <div
-            key={key}
-            className="overflow-x-auto rounded-lg ring-1 ring-slate-200 ring-inset dark:ring-slate-800"
-          >
-            <table className="w-full border-collapse text-left text-xs">
+          <div key={key} className="ring-border overflow-x-auto rounded-lg ring-1 ring-inset">
+            <table className="w-full border-collapse text-left text-xs tabular-nums">
               <thead>
                 <tr>
                   {header.map((h, i) => (
                     <th
                       key={i}
-                      className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 font-semibold text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                      className="border-border bg-surface-muted text-foreground border-b px-2 py-1.5 font-semibold"
                     >
                       {h}
                     </th>
@@ -163,14 +160,11 @@ function renderBlocks(source: string): ReactNode {
               </thead>
               <tbody>
                 {rows.map((row, ri) => (
-                  <tr
-                    key={ri}
-                    className="odd:bg-white even:bg-slate-50/60 dark:odd:bg-slate-950 dark:even:bg-slate-900/40"
-                  >
+                  <tr key={ri} className="odd:bg-surface even:bg-surface-muted/60">
                     {row.map((cell, ci) => (
                       <td
                         key={ci}
-                        className="border-b border-slate-100 px-2 py-1.5 text-slate-700 dark:border-slate-800 dark:text-slate-300"
+                        className="border-border/60 text-muted-foreground border-b px-2 py-1.5"
                       >
                         {inline(cell, ri * 100 + ci)}
                       </td>
@@ -184,25 +178,25 @@ function renderBlocks(source: string): ReactNode {
       }
       case "h1":
         return (
-          <h1 key={key} className="text-xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 key={key} className="text-foreground text-xl font-bold tracking-tight">
             {inline(block.content, key)}
           </h1>
         );
       case "h2":
         return (
-          <h2 key={key} className="text-lg font-semibold text-slate-900 dark:text-slate-50">
+          <h2 key={key} className="text-foreground text-lg font-semibold tracking-tight">
             {inline(block.content, key)}
           </h2>
         );
       case "h3":
         return (
-          <h3 key={key} className="text-base font-semibold text-slate-900 dark:text-slate-50">
+          <h3 key={key} className="text-foreground text-base font-semibold">
             {inline(block.content, key)}
           </h3>
         );
       case "ul":
         return (
-          <ul key={key} className="list-disc space-y-1 pl-5 text-slate-700 dark:text-slate-300">
+          <ul key={key} className="text-muted-foreground list-disc space-y-1 pl-5">
             {block.content.split("\n").map((item, i) => (
               <li key={i}>{inline(item, key * 100 + i)}</li>
             ))}
@@ -210,7 +204,7 @@ function renderBlocks(source: string): ReactNode {
         );
       case "ol":
         return (
-          <ol key={key} className="list-decimal space-y-1 pl-5 text-slate-700 dark:text-slate-300">
+          <ol key={key} className="text-muted-foreground list-decimal space-y-1 pl-5">
             {block.content.split("\n").map((item, i) => (
               <li key={i}>{inline(item, key * 100 + i)}</li>
             ))}
@@ -218,7 +212,7 @@ function renderBlocks(source: string): ReactNode {
         );
       default:
         return (
-          <p key={key} className="text-slate-700 dark:text-slate-300">
+          <p key={key} className="text-muted-foreground">
             {inline(block.content, key)}
           </p>
         );

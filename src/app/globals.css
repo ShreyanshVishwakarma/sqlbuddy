@@ -2,25 +2,77 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Design tokens — single accent (indigo), warm-tinted neutral grays,
+ * off-black darks (never pure #000). One gray family everywhere.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background: #faf9f7;
+  --foreground: #1c1917;
+  --surface: #ffffff;
+  --surface-muted: #f3f1ed;
+  --border: #e7e3dc;
+  --border-strong: #d6d1c7;
+  --accent: #4f46e5;
+  --accent-strong: #4338ca;
+  --accent-soft: rgba(79, 70, 229, 0.08);
+  --accent-foreground: #ffffff;
+  --muted: #7d7568;
+  --muted-foreground: #57534e;
+  --danger: #b4382c;
+  --danger-soft: rgba(180, 56, 44, 0.08);
+  --success: #2f7d52;
+  --success-soft: rgba(47, 125, 82, 0.1);
+  --warning: #9a6b1f;
+  --code-bg: #17151a;
+  --shadow-color: 38, 34, 28;
 }
 
 .dark {
-  --background: #020617;
-  --foreground: #e2e8f0;
+  --background: #0f0e0c;
+  --foreground: #eceae4;
+  --surface: #171512;
+  --surface-muted: #1e1b17;
+  --border: #2b2722;
+  --border-strong: #3a352e;
+  --accent: #818cf8;
+  --accent-strong: #6366f1;
+  --accent-soft: rgba(129, 140, 248, 0.12);
+  --accent-foreground: #0f0e0c;
+  --muted: #9a9284;
+  --muted-foreground: #a8a196;
+  --danger: #f0715f;
+  --danger-soft: rgba(240, 113, 95, 0.12);
+  --success: #5fb98a;
+  --success-soft: rgba(95, 185, 138, 0.12);
+  --warning: #d9a441;
+  --code-bg: #0b0a09;
+  --shadow-color: 0, 0, 0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-code: var(--code-bg);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 html {
   color-scheme: light;
+  scroll-behavior: smooth;
 }
 
 html.dark {
@@ -30,5 +82,85 @@ html.dark {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+}
+
+/* Tabular figures for data-dense UIs (durations, counts, results). */
+.tabular-nums,
+table,
+.stat-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Text balance for headlines to avoid orphaned words. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+/* Subtle grain overlay to break digital flatness. */
+.grain::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Tinted, layered shadows instead of flat black. */
+.shadow-tinted {
+  box-shadow:
+    0 1px 2px rgba(var(--shadow-color), 0.06),
+    0 8px 24px -8px rgba(var(--shadow-color), 0.18);
+}
+
+.shadow-tinted-lg {
+  box-shadow:
+    0 1px 2px rgba(var(--shadow-color), 0.05),
+    0 12px 32px -12px rgba(var(--shadow-color), 0.28);
+}
+
+/* Focus ring: visible, consistent, accessible. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Custom scrollbars that match the palette. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Gentle entrance for content blocks. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

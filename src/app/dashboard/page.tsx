@@ -51,51 +51,65 @@ export default function DashboardPage() {
 
   if (!loaded) {
     return (
-      <main className="mx-auto max-w-5xl px-4 py-10">
-        <div className="h-8 w-48 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+      <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+        <div className="bg-surface-muted h-8 w-48 animate-pulse rounded" />
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-28 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" />
+            <div key={i} className="bg-surface-muted h-28 animate-pulse rounded-xl" />
           ))}
         </div>
       </main>
     );
   }
 
+  const pct = stats.total === 0 ? 0 : Math.round((stats.completed / stats.total) * 100);
+
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-          Dashboard
-        </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Progress is stored only in this browser (IndexedDB). Clearing browser data resets it.
+    <main className="grain mx-auto max-w-5xl px-4 py-12 sm:px-6">
+      <header className="mb-10 max-w-2xl">
+        <p className="text-accent mb-3 text-xs font-semibold tracking-widest uppercase">
+          Your progress
+        </p>
+        <h1 className="text-foreground text-4xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground mt-3">
+          Stored only in this browser (IndexedDB). Clearing browser data resets it.
         </p>
       </header>
 
-      {/* Stat cards */}
+      {/* Stat cards — layered, not bordered boxes */}
       <section className="grid gap-4 sm:grid-cols-3" aria-label="Overall progress">
         <StatCard
           label="Completed"
-          value={`${stats.completed} / ${stats.total}`}
-          sub="questions passed"
+          value={`${stats.completed}`}
+          sub={`of ${stats.total} questions`}
+          accent
         />
-        <StatCard
-          label="Attempted"
-          value={`${stats.attempted} / ${stats.total}`}
-          sub="at least one submission"
-        />
+        <StatCard label="Attempted" value={`${stats.attempted}`} sub="at least one submission" />
         <StatCard label="Bookmarked" value={`${stats.bookmarked}`} sub="questions saved" />
       </section>
 
+      {/* Overall completion bar */}
+      <section className="bg-surface-muted mt-6 rounded-xl p-5">
+        <div className="flex items-baseline justify-between">
+          <p className="text-foreground text-sm font-medium">Overall completion</p>
+          <p className="text-muted-foreground text-sm tabular-nums">{pct}%</p>
+        </div>
+        <div className="bg-background mt-3 h-2.5 overflow-hidden rounded-full">
+          <div
+            className="bg-accent h-full rounded-full transition-all duration-500"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+      </section>
+
       {/* Completion by topic */}
-      <section className="mt-8">
-        <h2 className="mb-3 text-lg font-semibold text-slate-900 dark:text-slate-50">
+      <section className="mt-10">
+        <h2 className="text-foreground mb-4 text-lg font-semibold tracking-tight">
           Completion by topic
         </h2>
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
+        <div className="border-border bg-surface shadow-tinted overflow-hidden rounded-xl border">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs tracking-wider text-slate-500 uppercase dark:bg-slate-900 dark:text-slate-400">
+            <thead className="bg-surface-muted text-muted text-left text-xs tracking-widest uppercase">
               <tr>
                 <th className="px-4 py-2.5 font-semibold">Topic</th>
                 <th className="px-4 py-2.5 font-semibold">Progress</th>
@@ -105,21 +119,21 @@ export default function DashboardPage() {
               {Object.entries(stats.byTopic)
                 .sort((a, b) => b[1].total - a[1].total)
                 .map(([topic, { total, completed }]) => {
-                  const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+                  const tpct = total === 0 ? 0 : Math.round((completed / total) * 100);
                   return (
-                    <tr key={topic} className="border-t border-slate-100 dark:border-slate-800">
+                    <tr key={topic} className="border-border border-t">
                       <td className="px-4 py-2.5">
                         <TopicChip topic={topic} />
                       </td>
                       <td className="px-4 py-2.5">
                         <div className="flex items-center gap-3">
-                          <div className="h-2 w-full max-w-52 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                          <div className="bg-surface-muted h-2 w-full max-w-52 overflow-hidden rounded-full">
                             <div
-                              className="h-full rounded-full bg-indigo-500 transition-all"
-                              style={{ width: `${pct}%` }}
+                              className="bg-accent h-full rounded-full transition-all duration-500"
+                              style={{ width: `${tpct}%` }}
                             />
                           </div>
-                          <span className="w-12 text-right text-xs text-slate-500 dark:text-slate-400">
+                          <span className="text-muted w-12 text-right text-xs tabular-nums">
                             {completed}/{total}
                           </span>
                         </div>
@@ -133,58 +147,69 @@ export default function DashboardPage() {
       </section>
 
       {/* Recently opened */}
-      <section className="mt-8">
-        <h2 className="mb-3 text-lg font-semibold text-slate-900 dark:text-slate-50">
+      <section className="mt-10">
+        <h2 className="text-foreground mb-4 text-lg font-semibold tracking-tight">
           Recently opened
         </h2>
         {stats.recentlyOpened.length === 0 ? (
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Nothing yet — open a question to get started.
-          </p>
+          <div className="border-border-strong rounded-xl border border-dashed p-10 text-center">
+            <p className="text-foreground text-sm font-medium">Nothing here yet</p>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Open a question to start building your streak.
+            </p>
+            <Link
+              href="/questions"
+              className="bg-accent text-accent-foreground hover:bg-accent-strong mt-4 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors"
+            >
+              Browse questions
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
         ) : (
-          <ul className="divide-y divide-slate-100 rounded-xl border border-slate-200 dark:divide-slate-800 dark:border-slate-800">
+          <ul className="divide-border border-border bg-surface shadow-tinted divide-y overflow-hidden rounded-xl border">
             {stats.recentlyOpened.map((q) => (
               <li key={q.slug}>
                 <Link
                   href={`/questions/${q.slug}`}
-                  className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/40"
+                  className="hover:bg-surface-muted flex items-center justify-between gap-3 px-4 py-3 transition-colors duration-150"
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <DifficultyBadge difficulty={q.difficulty} />
-                    <span className="truncate font-medium text-slate-800 dark:text-slate-200">
-                      {q.title}
-                    </span>
+                    <span className="text-foreground truncate font-medium">{q.title}</span>
                   </div>
-                  <span className="shrink-0 text-xs text-slate-400">
-                    {states[q.id]?.completed ? "✓ completed" : ""}
-                  </span>
+                  {states[q.id]?.completed && (
+                    <span className="text-success shrink-0 text-xs font-medium">✓ completed</span>
+                  )}
                 </Link>
               </li>
             ))}
           </ul>
         )}
       </section>
-
-      <section className="mt-8">
-        <Link
-          href="/settings"
-          className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
-        >
-          Settings — theme, notes, clear local data →
-        </Link>
-      </section>
     </main>
   );
 }
 
-function StatCard({ label, value, sub }: { label: string; value: string; sub: string }) {
+function StatCard({
+  label,
+  value,
+  sub,
+  accent,
+}: {
+  label: string;
+  value: string;
+  sub: string;
+  accent?: boolean;
+}) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-5 dark:border-slate-800 dark:bg-slate-900/40">
-      <p className="text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
-        {label}
+    <div className="bg-surface-muted shadow-tinted rounded-xl p-5">
+      <p className="text-muted text-xs font-semibold tracking-widest uppercase">{label}</p>
+      <p
+        className={`mt-1 text-3xl font-bold tabular-nums ${accent ? "text-accent" : "text-foreground"}`}
+      >
+        {value}
       </p>
-      <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-slate-50">{value}</p>
-      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{sub}</p>
+      <p className="text-muted-foreground mt-1 text-xs">{sub}</p>
     </div>
   );
 }

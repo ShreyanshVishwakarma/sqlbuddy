@@ -14,28 +14,33 @@ const SqlWorkspace = nextDynamic(
   },
 );
 
-export function PracticeWorkspace({ question }: { question: QuestionPackage }) {
-  return <SqlWorkspace question={question} />;
+interface PracticeWorkspaceProps {
+  question: QuestionPackage;
+  nextSlug: string | null;
+}
+
+export function PracticeWorkspace({ question, nextSlug }: PracticeWorkspaceProps) {
+  return <SqlWorkspace question={question} nextSlug={nextSlug} />;
 }
 
 function WorkspaceSkeleton() {
   return (
     <div className="flex h-[calc(100dvh-3.5rem)] flex-col">
-      <div className="flex items-center gap-3 border-b border-slate-200 px-4 py-2.5 dark:border-slate-800">
-        <div className="h-4 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-        <div className="h-4 w-48 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-        <div className="ml-auto h-8 w-24 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-        <div className="h-8 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+      <div className="border-border bg-surface flex items-center gap-3 border-b px-4 py-2.5">
+        <div className="bg-surface-muted h-4 w-20 animate-pulse rounded" />
+        <div className="bg-surface-muted h-4 w-48 animate-pulse rounded" />
+        <div className="bg-surface-muted ml-auto h-8 w-24 animate-pulse rounded" />
+        <div className="bg-surface-muted h-8 w-20 animate-pulse rounded" />
       </div>
       <div className="grid flex-1 grid-cols-[320px_1fr]">
-        <div className="border-r border-slate-200 p-4 dark:border-slate-800">
-          <div className="h-3 w-24 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-          <div className="mt-3 h-3 w-full animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
-          <div className="mt-2 h-3 w-5/6 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
+        <div className="border-border bg-surface border-r p-4">
+          <div className="bg-surface-muted h-3 w-24 animate-pulse rounded" />
+          <div className="bg-surface-muted mt-3 h-3 w-full animate-pulse rounded" />
+          <div className="bg-surface-muted mt-2 h-3 w-5/6 animate-pulse rounded" />
         </div>
-        <div className="flex flex-col">
-          <div className="flex-1 bg-slate-100 dark:bg-slate-900" />
-          <div className="h-52 border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950" />
+        <div className="bg-surface flex flex-col">
+          <div className="bg-surface-muted/60 flex-1" />
+          <div className="border-border bg-surface h-52 border-t" />
         </div>
       </div>
     </div>
