@@ -1,0 +1,37 @@
+{
+  "id": "top-three-per-category",
+  "slug": "top-three-per-category",
+  "title": "Top Three Per Category",
+  "difficulty": "hard",
+  "topics": ["Window Functions", "JOINs", "Duplicate handling"],
+  "description": "Return the top three products by revenue per category, including ties.",
+  "concepts": ["DENSE_RANK", "PARTITION BY", "INNER JOIN", "Aggregation", "Tie handling"],
+  "expectedRowCount": 9,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Categories with three or more products each."
+    },
+    {
+      "id": "ties",
+      "file": "ties.sql",
+      "label": "Tied ranks",
+      "description": "Products tied for third place must all appear."
+    },
+    {
+      "id": "small-categories",
+      "file": "small-categories.sql",
+      "label": "Small categories",
+      "description": "A category with fewer than three products returns only what exists."
+    }
+  ]
+}

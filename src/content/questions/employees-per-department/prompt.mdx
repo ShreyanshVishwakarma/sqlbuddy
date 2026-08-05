@@ -1,0 +1,42 @@
+# Departments by Average Salary
+
+## Prompt
+
+Given the `department` and `employee` tables below, write a query that returns the **name of every department whose average salary is higher than the company-wide average salary** (that is, the average over all employees).
+
+Rules:
+
+- Return two columns: `department` (the department name) and `avg_salary` (that department's average salary, as an integer — `CAST(ROUND(x) AS INTEGER)` or a plain rounded number is fine; the exact rounding must match the reference, so round to a whole number).
+- If a department has **no employees with a non-NULL salary**, it has no average and must be **excluded**.
+- `employee.salary` may be `NULL`; NULLs are ignored when computing averages.
+- `employee.department_id` may be `NULL`; such employees belong to no department and are ignored.
+- The result may be empty if no department qualifies.
+
+## Example
+
+| employee |       | department    |     |
+| -------- | ----- | ------------- | --- | ----------- |
+| id       | name  | department_id | id  | name        |
+| 1        | Alice | 1             | 1   | Engineering |
+| 2        | Bob   | 1             | 2   | Sales       |
+| 3        | Carol | 2             |     |             |
+| 4        | Dave  | 2             |     |             |
+
+Company average = (100 + 60 + 80 + 40) / 4 = 70. Engineering average = 80 > 70, Sales = 60 ≤ 70.
+
+Expected result:
+
+| department  | avg_salary |
+| ----------- | ---------- |
+| Engineering | 80         |
+
+## Constraints
+
+- `department.id` is the primary key.
+- `employee.department_id` references `department.id` and is nullable.
+
+## Tips
+
+- Compute the company average in a scalar subquery and compare with `HAVING`.
+- The company average should be computed **once**; putting `AVG` over the whole table inside the `HAVING` is a common mistake that changes the answer.
+- Rounding: `CAST(ROUND(AVG(salary)) AS INTEGER)` behaves like PostgreSQL's `ROUND(double precision)` in SQLite.

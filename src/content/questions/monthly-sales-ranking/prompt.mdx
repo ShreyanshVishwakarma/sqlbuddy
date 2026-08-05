@@ -1,0 +1,45 @@
+# Monthly Sales Ranking
+
+## Prompt
+
+Using the `sales` table below, rank salespeople by the **total amount they sold per calendar month**, and return one row per (salesperson, month) in which they had **at least one sale**.
+
+The output must contain three columns:
+
+- `salesperson` — the salesperson's name.
+- `month` — the calendar month of the sales, formatted as `YYYY-MM` (for example `2024-01`).
+- `rank` — the rank of that salesperson's monthly total within that month.
+
+Rules:
+
+- Ties are allowed: salespeople with the **same monthly total share the same rank**, and the next rank must not be skipped (a **dense** ranking).
+- A salesperson with **no sales in a month** produces **no row** for that month.
+- `sales.amount` may be `NULL`; such rows contribute nothing to a monthly total.
+
+## Example
+
+| id  | salesperson | month      | amount |
+| --- | ----------- | ---------- | ------ |
+| 1   | Alice       | 2024-01-01 | 100    |
+| 2   | Bob         | 2024-01-05 | 100    |
+| 3   | Alice       | 2024-02-02 | 50     |
+
+Expected result:
+
+| salesperson | month   | rank |
+| ----------- | ------- | ---- |
+| Alice       | 2024-01 | 1    |
+| Bob         | 2024-01 | 1    |
+| Alice       | 2024-02 | 1    |
+
+## Constraints
+
+- `sales.id` is the primary key.
+- `sales.amount` is nullable.
+- `sales.month` is a `DATE`; use `strftime('%Y-%m', month)` to format it in SQLite.
+
+## Tips
+
+- Aggregate first (`SUM(amount)` grouped by salesperson and month), then rank the aggregated rows — you cannot rank a raw `SUM` over an ungrouped table.
+- `DENSE_RANK` gives dense ranks; `RANK` and `ROW_NUMBER` behave differently under ties.
+- Watch `NULL` amounts: `SUM` ignores them, which is what we want.

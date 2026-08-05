@@ -1,0 +1,37 @@
+# Customers Without Orders
+
+## Prompt
+
+Given the `customers` and `orders` tables below, write a query that returns the **name of every customer who has never placed an order**.
+
+- Each customer should appear **at most once** in the result.
+- Only the customer `name` should be returned — no other columns.
+- `orders.customer_id` may be `NULL`; such orders do not belong to any customer and must not rescue anyone.
+
+## Example
+
+| customers |       | orders |             |
+| --------- | ----- | ------ | ----------- |
+| id        | name  | id     | customer_id |
+| 1         | Alice | 1      | 1           |
+| 2         | Bob   | 2      | 3           |
+| 3         | Carol | 3      | NULL        |
+| 4         | Dave  |        |             |
+
+Expected result:
+
+| name |
+| ---- |
+| Bob  |
+| Dave |
+
+## Constraints
+
+- `customers.id` is the primary key.
+- `orders.customer_id` references `customers.id` but is nullable.
+
+## Tips
+
+- This is an **anti-join**: keep rows from the left side that have no match on the right.
+- `LEFT JOIN` + `WHERE orders.id IS NULL` and `NOT EXISTS` are the two idiomatic forms.
+- If you use a subquery with `NOT IN`, remember how `NULL` values behave inside `NOT IN (…)`.

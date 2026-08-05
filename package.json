@@ -1,0 +1,50 @@
+{
+  "name": "sql-prep-lab",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "validate:content": "tsx scripts/validate-questions.ts"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "idb": "^8.0.3",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "sql.js": "^1.14.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@types/sql.js": "^1.4.11",
+    "@vitejs/plugin-react": "^6.0.5",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^30.0.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.8",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "unrs-resolver@1.12.2": true
+  }
+}

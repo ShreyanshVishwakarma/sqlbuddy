@@ -1,0 +1,37 @@
+{
+  "id": "employees-per-department",
+  "slug": "employees-per-department",
+  "title": "Departments by Average Salary",
+  "difficulty": "medium",
+  "topics": ["GROUP BY", "HAVING", "JOINs"],
+  "description": "Find departments whose average salary is above the company average.",
+  "concepts": ["INNER JOIN", "GROUP BY", "HAVING", "Subquery in HAVING", "AVG", "COALESCE"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Departments with several employees each."
+    },
+    {
+      "id": "duplicates",
+      "file": "duplicates.sql",
+      "label": "Duplicate rows",
+      "description": "The employees table contains exact duplicate rows that must count separately."
+    },
+    {
+      "id": "nulls",
+      "file": "nulls.sql",
+      "label": "NULL salaries",
+      "description": "NULL salaries must be excluded from averages, and an empty department appears once."
+    }
+  ]
+}

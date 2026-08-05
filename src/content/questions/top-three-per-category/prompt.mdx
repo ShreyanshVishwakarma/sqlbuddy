@@ -1,0 +1,42 @@
+# Top Three Per Category
+
+## Prompt
+
+Given the `category`, `product`, and `sale` tables below, return the **top three products by total revenue within each category**.
+
+- **Revenue** of a product is `SUM(quantity * unit_price)` over all its sales.
+- A product appears in the result if it ranks in the **top three** within its category.
+- Ties are allowed and must **not** skip ranks: if two products tie for third place, **both** must appear (a dense ranking).
+- A category with fewer than three products returns only the products it has.
+- A product with **no sales** has revenue 0 and may still appear if it ranks in the top three.
+- Output columns: `category` (name), `product` (name), `revenue` (rounded to a whole number with `ROUND(...)`).
+
+## Example
+
+| category |      | product |          | sale |            |            |
+| -------- | ---- | ------- | -------- | ---- | ---------- | ---------- | -------- |
+| id       | name | id      | name     | id   | product_id | unit_price | quantity |
+| 1        | Tech | 1       | Keyboard | 1    | 1          | 50         | 2        |
+|          |      | 2       | Mouse    | 2    | 2          | 25         | 4        |
+|          |      | 3       | Screen   |      |            |            |          |
+
+Tech revenue: Keyboard 100, Mouse 100, Screen 0.
+
+Expected result:
+
+| category | product  | revenue |
+| -------- | -------- | ------- |
+| Tech     | Keyboard | 100     |
+| Tech     | Mouse    | 100     |
+| Tech     | Screen   | 0       |
+
+## Constraints
+
+- `category.id`, `product.id`, and `sale.id` are primary keys.
+- `product.category_id` references `category.id`; `sale.product_id` references `product.id`.
+
+## Tips
+
+- Aggregate revenue first (`SUM(quantity * unit_price)` grouped by product), then rank the aggregated rows with `DENSE_RANK() OVER (PARTITION BY category ...)`.
+- Joining `product` to `category` is a pure lookup; it must not change the row grain — start from `product` so products without sales still exist.
+- `ROUND()` keeps the result tidy; the reference compares rounded values.

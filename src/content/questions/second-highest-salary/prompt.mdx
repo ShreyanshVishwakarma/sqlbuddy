@@ -1,0 +1,36 @@
+# Second Highest Salary
+
+## Prompt
+
+Given the `employee` table below, write a query that returns the **second-highest distinct salary** from the `salary` column.
+
+- "Distinct" means identical salaries count once. If three employees earn 100, 100, and 90, the salaries are 100 and 90, so the answer is 90.
+- If there is **no second-highest salary** (fewer than two distinct salaries, or an empty table), the query must return **one row with a `NULL` value** — not zero rows.
+- `NULL` salaries must be ignored: they are not a value and should never be returned as the answer.
+
+The result should have a single column (name it `second_highest_salary`) and a single row.
+
+## Example
+
+| id  | salary |
+| --- | ------ |
+| 1   | 100    |
+| 2   | 100    |
+| 3   | 90     |
+| 4   | 80     |
+
+Expected result:
+
+| second_highest_salary |
+| --------------------- |
+| 90                    |
+
+## Constraints
+
+- `employee.id` is the primary key and is never `NULL`.
+- `employee.salary` may be `NULL`.
+
+## Tips
+
+- Think about what happens with duplicates before you write `LIMIT 1 OFFSET 1` — an unordered `DISTINCT` + `OFFSET` approach is fragile.
+- Aggregates like `MAX` over a set of values are a clean way to guarantee "one row, or `NULL` when empty".

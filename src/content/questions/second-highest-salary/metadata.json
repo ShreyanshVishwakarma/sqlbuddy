@@ -1,0 +1,37 @@
+{
+  "id": "second-highest-salary",
+  "slug": "second-highest-salary",
+  "title": "Second Highest Salary",
+  "difficulty": "easy",
+  "topics": ["Subqueries", "Aggregation", "NULL handling"],
+  "description": "Return the second-highest distinct salary, or NULL when it does not exist.",
+  "concepts": ["SELECT", "DISTINCT", "Subquery in FROM", "Aggregate MAX", "NULL handling"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 10
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Distinct salaries with a clear second-highest value."
+    },
+    {
+      "id": "duplicates",
+      "file": "duplicates.sql",
+      "label": "Duplicate salaries",
+      "description": "Many employees share the top salary; the second-highest distinct value must still be found."
+    },
+    {
+      "id": "nulls",
+      "file": "nulls.sql",
+      "label": "NULL salaries",
+      "description": "NULL salaries are present and must not be treated as a value."
+    }
+  ]
+}

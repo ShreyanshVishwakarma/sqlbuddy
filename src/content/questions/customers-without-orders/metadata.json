@@ -1,0 +1,31 @@
+{
+  "id": "customers-without-orders",
+  "slug": "customers-without-orders",
+  "title": "Customers Without Orders",
+  "difficulty": "easy",
+  "topics": ["JOINs", "Subqueries", "NULL handling"],
+  "description": "List customers who have never placed an order using an anti-join.",
+  "concepts": ["LEFT JOIN", "NOT EXISTS", "Anti-join", "NULL filtering"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A mix of customers with and without orders."
+    },
+    {
+      "id": "edge-cases",
+      "file": "edge-cases.sql",
+      "label": "Edge cases",
+      "description": "A customer with many orders, a NULL customer_id order, and a customer whose name repeats."
+    }
+  ]
+}

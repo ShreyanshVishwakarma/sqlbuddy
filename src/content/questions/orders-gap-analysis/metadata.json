@@ -1,0 +1,37 @@
+{
+  "id": "orders-gap-analysis",
+  "slug": "orders-gap-analysis",
+  "title": "Orders Gap Analysis",
+  "difficulty": "medium",
+  "topics": ["Common Table Expressions", "Window Functions", "Date Functions", "NULL handling"],
+  "description": "Find the gap in days between consecutive orders per customer.",
+  "concepts": ["WITH", "LAG", "julianday", "CAST", "Subqueries"],
+  "expectedRowCount": 6,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Customers with several orders each."
+    },
+    {
+      "id": "duplicates",
+      "file": "duplicates.sql",
+      "label": "Duplicate rows",
+      "description": "Two orders on the same day for one customer; each must appear."
+    },
+    {
+      "id": "nulls",
+      "file": "nulls.sql",
+      "label": "NULL dates and single orders",
+      "description": "A NULL order date and a customer with a single order are handled."
+    }
+  ]
+}

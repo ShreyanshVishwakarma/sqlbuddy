@@ -1,0 +1,37 @@
+{
+  "id": "monthly-sales-ranking",
+  "slug": "monthly-sales-ranking",
+  "title": "Monthly Sales Ranking",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "GROUP BY", "Date Functions"],
+  "description": "Rank salespeople by their monthly sales, including ties, and handle months with no sales.",
+  "concepts": ["DENSE_RANK", "PARTITION BY", "GROUP BY", "Date truncation", "COALESCE"],
+  "expectedRowCount": 8,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A few salespeople with regular monthly sales."
+    },
+    {
+      "id": "ties",
+      "file": "ties.sql",
+      "label": "Tied ranks",
+      "description": "Salespeople with equal totals in a month; ranks must be dense."
+    },
+    {
+      "id": "missing-months",
+      "file": "missing-months.sql",
+      "label": "Missing months",
+      "description": "A salesperson with zero sales in a month must not appear in that month."
+    }
+  ]
+}

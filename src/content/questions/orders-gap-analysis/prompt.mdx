@@ -1,0 +1,41 @@
+# Orders Gap Analysis
+
+## Prompt
+
+Given the `orders` table below, write a query that returns **one row per order**, with an extra column showing **how many days elapsed since that customer's previous order**.
+
+- The column must be named `gap_days`.
+- The **first order for each customer** has no previous order: `gap_days` must be `NULL` (not 0).
+- Orders are compared per customer — a customer's order is only compared with that same customer's earlier orders.
+- If two orders share the same date, the gap between them is 0 days.
+- `orders.order_date` may be `NULL`; such an order has an unknown date and its gap must be `NULL`.
+- The output must include at least: `customer_id`, `order_date`, and `gap_days`.
+
+In SQLite, the number of days between two dates is `CAST(julianday(later) - julianday(earlier) AS INTEGER)`.
+
+## Example
+
+| id  | customer_id | order_date |
+| --- | ----------- | ---------- |
+| 1   | 1           | 2024-01-10 |
+| 2   | 1           | 2024-01-13 |
+| 3   | 2           | 2024-01-12 |
+
+Expected result (row order doesn't matter):
+
+| id  | customer_id | order_date | gap_days |
+| --- | ----------- | ---------- | -------- |
+| 1   | 1           | 2024-01-10 | NULL     |
+| 2   | 1           | 2024-01-13 | 3        |
+| 3   | 2           | 2024-01-12 | NULL     |
+
+## Constraints
+
+- `orders.id` is the primary key.
+- `orders.order_date` is nullable.
+
+## Tips
+
+- `LAG()` is the natural tool here; it produces `NULL` for the first row in each partition.
+- The order used by `LAG` must be deterministic — order by `order_date`, then by `id` as a tiebreaker.
+- A `NULL` order date in the `ORDER BY` sorts last in SQLite, which is exactly the "unknown" behavior we want.
