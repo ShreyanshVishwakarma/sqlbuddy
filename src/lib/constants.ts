@@ -7,12 +7,32 @@
  * regenerates this file, or update it by hand and keep it in sync.
  */
 export const QUESTION_SLUGS: string[] = [
-  "second-highest-salary",
+  // Basics
+  "duplicate-emails",
+  "employees-earning-more-than-managers",
+  "rising-temperature",
+  "active-users-per-day",
   "customers-without-orders",
-  "monthly-sales-ranking",
+  "second-highest-salary",
+  // Aggregation & grouping
   "employees-per-department",
+  "percentage-of-total-sales",
+  "pivot-quarterly-sales",
+  // Joins & subqueries
+  "nth-highest-salary",
+  // CTEs & dates
   "orders-gap-analysis",
+  // Window functions
+  "rank-scores",
+  "running-total",
+  "rolling-average-sales",
+  "first-last-order",
+  "latest-event-per-user",
+  "monthly-sales-ranking",
   "top-three-per-category",
+  // Gaps & islands
+  "consecutive-logins",
+  "longest-login-streak",
 ];
 
 /** Constant path (relative to public/) where the sql.js WASM binary is served from. */

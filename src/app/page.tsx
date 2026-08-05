@@ -98,7 +98,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {questions.slice(0, 6).map((q) => (
+          {questions.slice(0, 9).map((q) => (
             <Link
               key={q.slug}
               href={`/questions/${q.slug}`}

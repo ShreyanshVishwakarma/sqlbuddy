@@ -1,0 +1,36 @@
+# Longest Login Streak
+
+## Prompt
+
+Given the `logins` table below (one row per login, possibly several per user per day), write a query that returns, **for each user**, the length of their **longest run of consecutive login days**.
+
+- Output columns: `user_id` and `longest_streak`, ordered by `user_id`.
+- A user with a single login has a streak of **1**.
+- Multiple logins on the same day count as **one** day.
+- If two runs are tied for the longest, the length is still reported once.
+
+## Example
+
+| user_id | login_at   |
+| ------- | ---------- |
+| 1       | 2024-01-01 |
+| 1       | 2024-01-02 |
+| 1       | 2024-01-04 |
+| 2       | 2024-01-01 |
+
+Expected result:
+
+| user_id | longest_streak |
+| ------- | -------------- |
+| 1       | 2              |
+| 2       | 1              |
+
+## Constraints
+
+- `logins` has one row per login; a user can log in several times per day.
+- `logins.login_at` is a `DATE` and is not `NULL`.
+
+## Tips
+
+- Same islands technique as "Consecutive Login Days", but finish with `MAX(streak_len)` per user.
+- Dedupe to one row per (user, day) first, or the streak math silently breaks.

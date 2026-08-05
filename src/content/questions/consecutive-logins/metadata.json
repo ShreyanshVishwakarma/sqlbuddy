@@ -1,0 +1,37 @@
+{
+  "id": "consecutive-logins",
+  "slug": "consecutive-logins",
+  "title": "Consecutive Login Days",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "CTEs", "Date Functions", "Duplicate handling"],
+  "description": "Find users who logged in on three or more consecutive calendar days.",
+  "concepts": ["ROW_NUMBER", "Gaps and islands", "CTE", "julianday", "DISTINCT"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "One user with a 3-day streak and one without."
+    },
+    {
+      "id": "same-day-duplicates",
+      "file": "same-day-duplicates.sql",
+      "label": "Same-day logins",
+      "description": "Multiple logins on one day must not break streak math."
+    },
+    {
+      "id": "multiple-streaks",
+      "file": "multiple-streaks.sql",
+      "label": "Multiple streaks",
+      "description": "A user with two separate qualifying runs appears twice."
+    }
+  ]
+}

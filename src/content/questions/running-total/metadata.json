@@ -1,0 +1,37 @@
+{
+  "id": "running-total",
+  "slug": "running-total",
+  "title": "Running Total",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Aggregation", "Date Functions"],
+  "description": "Compute a running total of sales over time, partitioned per account.",
+  "concepts": ["SUM OVER", "ROWS BETWEEN", "PARTITION BY", "Tiebreakers"],
+  "expectedRowCount": 6,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Two accounts with several dated sales each."
+    },
+    {
+      "id": "same-day",
+      "file": "same-day.sql",
+      "label": "Same-day sales",
+      "description": "Sales sharing a date require a deterministic tiebreaker."
+    },
+    {
+      "id": "null-amounts",
+      "file": "null-amounts.sql",
+      "label": "NULL amounts",
+      "description": "NULL amounts are ignored by SUM and do not change the running total."
+    }
+  ]
+}

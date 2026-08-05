@@ -1,0 +1,35 @@
+# Active Users Per Day
+
+## Prompt
+
+Given the `activity` table below, write a query that returns, **for each date that has any activity**, the number of **distinct users** who were active that day.
+
+- A user is "active" on a day if they have **at least one** event row that day.
+- A user with several events on the same day must be counted **once**.
+- Output columns: `event_date` and `active_users`, ordered by `event_date`.
+- `activity.user_id` may be `NULL`; a `NULL` user_id is not a user and must not be counted.
+
+## Example
+
+| user_id | event_date | event_type |
+| ------- | ---------- | ---------- |
+| 1       | 2024-01-01 | view       |
+| 1       | 2024-01-01 | click      |
+| 2       | 2024-01-01 | view       |
+| 1       | 2024-01-02 | click      |
+
+Expected result:
+
+| event_date | active_users |
+| ---------- | ------------ |
+| 2024-01-01 | 2            |
+| 2024-01-02 | 1            |
+
+## Constraints
+
+- The `activity` table has one row per event; a user can appear many times per day.
+- `activity.user_id` is nullable.
+
+## Tips
+
+- `COUNT(DISTINCT user_id)` grouped by `event_date` is the whole trick — `COUNT(*)` would overcount.

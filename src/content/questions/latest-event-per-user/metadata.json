@@ -1,0 +1,37 @@
+{
+  "id": "latest-event-per-user",
+  "slug": "latest-event-per-user",
+  "title": "Latest Event Per User",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Duplicate handling"],
+  "description": "Return each user's most recent event in full.",
+  "concepts": ["ROW_NUMBER", "PARTITION BY", "Tiebreakers"],
+  "expectedRowCount": 3,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Users with events on several timestamps."
+    },
+    {
+      "id": "timestamp-ties",
+      "file": "timestamp-ties.sql",
+      "label": "Timestamp ties",
+      "description": "Two events at the same timestamp are resolved by event id."
+    },
+    {
+      "id": "single-event",
+      "file": "single-event.sql",
+      "label": "Single event",
+      "description": "A user with one event returns it trivially."
+    }
+  ]
+}

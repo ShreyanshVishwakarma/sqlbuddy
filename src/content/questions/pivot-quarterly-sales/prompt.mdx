@@ -1,0 +1,35 @@
+# Pivot Quarterly Sales
+
+## Prompt
+
+Given the `sales` table below (one row per (year, quarter) of revenue), write a query that **pivots** it so each **year** is one row with one column per quarter: `year`, `q1_revenue`, `q2_revenue`, `q3_revenue`, `q4_revenue`.
+
+- A year with **no sales in a quarter** shows `NULL` in that quarter's column.
+- Order the result by `year`.
+- `sales.revenue` may be `NULL`; `NULL` values contribute nothing.
+
+## Example
+
+| year | quarter | revenue |
+| ---- | ------- | ------- |
+| 2023 | 1       | 100     |
+| 2023 | 2       | 50      |
+| 2024 | 1       | 75      |
+| 2024 | 4       | 25      |
+
+Expected result:
+
+| year | q1_revenue | q2_revenue | q3_revenue | q4_revenue |
+| ---- | ---------- | ---------- | ---------- | ---------- |
+| 2023 | 100        | 50         | NULL       | NULL       |
+| 2024 | 75         | NULL       | NULL       | 25         |
+
+## Constraints
+
+- `sales` has one row per (year, quarter) — quarters are 1..4.
+- `sales.revenue` is nullable.
+
+## Tips
+
+- Conditional aggregation is the portable pivot: `SUM(CASE WHEN quarter = 1 THEN revenue END) AS q1_revenue`, repeated per quarter, grouped by `year`.
+- `SUM` ignores `NULL`, so a quarter with no matching rows yields `NULL`.

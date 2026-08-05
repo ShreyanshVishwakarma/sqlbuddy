@@ -129,6 +129,31 @@ src/content/questions/<slug>/
 
 `metadata.json` is validated against `src/content/schema.ts` (Zod, strict) at load time and by `npm run validate:content`.
 
+### Question catalogue (20 questions)
+
+| Question                                  | Difficulty | Concepts                       |
+| ----------------------------------------- | ---------- | ------------------------------ |
+| Duplicate Emails                          | easy       | GROUP BY, HAVING               |
+| Employees Earning More Than Their Manager | easy       | Self join                      |
+| Active Users Per Day                      | easy       | COUNT(DISTINCT)                |
+| Customers Without Orders                  | easy       | LEFT JOIN / NOT EXISTS         |
+| Second Highest Salary                     | easy       | Subqueries, NULL handling      |
+| Rising Temperature                        | easy       | LAG / self join                |
+| Nth Highest Salary                        | medium     | DENSE_RANK, aggregate wrapper  |
+| Rank Scores                               | medium     | DENSE_RANK vs RANK             |
+| Departments by Average Salary             | medium     | GROUP BY, HAVING, subqueries   |
+| Consecutive Login Days                    | medium     | Gaps and islands               |
+| Longest Login Streak                      | medium     | Gaps and islands, MAX          |
+| Running Total                             | medium     | SUM OVER, window frames        |
+| Rolling Average Sales                     | medium     | AVG OVER, ROWS BETWEEN         |
+| First and Last Order Per Customer         | medium     | FIRST_VALUE / ROW_NUMBER pivot |
+| Latest Event Per User                     | medium     | ROW_NUMBER per partition       |
+| Percentage of Total Sales                 | medium     | SUM OVER ()                    |
+| Pivot Quarterly Sales                     | medium     | Conditional aggregation        |
+| Monthly Sales Ranking                     | medium     | DENSE_RANK, PARTITION BY       |
+| Orders Gap Analysis                       | medium     | LAG, date arithmetic           |
+| Top Three Per Category                    | hard       | DENSE_RANK with ties           |
+
 ## How validation works
 
 When a learner submits, the browser-side validator:

@@ -31,3 +31,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# tool-local state (command-code taste/preferences)
+.commandcode/

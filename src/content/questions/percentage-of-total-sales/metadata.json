@@ -1,0 +1,37 @@
+{
+  "id": "percentage-of-total-sales",
+  "slug": "percentage-of-total-sales",
+  "title": "Percentage of Total Sales",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Aggregation"],
+  "description": "Show each region's share of overall sales as a percentage.",
+  "concepts": ["SUM OVER ()", "Window aggregation", "ROUND"],
+  "expectedRowCount": 4,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Three regions with different sales volumes."
+    },
+    {
+      "id": "null-amounts",
+      "file": "null-amounts.sql",
+      "label": "NULL amounts",
+      "description": "NULL amounts are skipped consistently by both sums."
+    },
+    {
+      "id": "single-region",
+      "file": "single-region.sql",
+      "label": "Single region",
+      "description": "One region contributes 100% of the total."
+    }
+  ]
+}

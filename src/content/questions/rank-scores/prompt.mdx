@@ -1,0 +1,38 @@
+# Rank Scores
+
+## Prompt
+
+Given the `scores` table below, write a query that returns each score's **rank**, where:
+
+- identical scores share the **same rank**;
+- the next rank is the next **distinct** score position — ranks must have **no gaps** after a tie.
+
+So scores `100, 100, 90` rank as `1, 1, 2` (never `1, 1, 3`).
+
+The result must contain: `id`, `score`, and `rank`, ordered by `rank` ascending, then `id` ascending.
+
+## Example
+
+| id  | score |
+| --- | ----- |
+| 1   | 100   |
+| 2   | 100   |
+| 3   | 90    |
+
+Expected result:
+
+| id  | score | rank |
+| --- | ----- | ---- |
+| 1   | 100   | 1    |
+| 2   | 100   | 1    |
+| 3   | 90    | 2    |
+
+## Constraints
+
+- `scores.id` is the primary key.
+- `scores.score` may be `NULL`; `NULL` scores should be excluded from the result.
+
+## Tips
+
+- Ties with no gaps is the textbook definition of `DENSE_RANK() OVER (ORDER BY score DESC)`.
+- `RANK()` would skip to 3 after a tie; `ROW_NUMBER()` would number tied rows 1, 2. Know all three.

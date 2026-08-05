@@ -1,0 +1,34 @@
+# Latest Event Per User
+
+## Prompt
+
+Given the `events` table below, write a query that returns, **for each user**, the **full row of their most recent event**.
+
+- "Most recent" means the largest `event_time`; when two events share a timestamp, the one with the **larger `event_id`** wins.
+- Output columns: `user_id`, `event_time`, `event_type`.
+- Each user appears exactly once.
+
+## Example
+
+| event_id | user_id | event_time          | event_type |
+| -------- | ------- | ------------------- | ---------- |
+| 1        | 1       | 2024-01-01 10:00:00 | view       |
+| 2        | 1       | 2024-01-02 09:30:00 | click      |
+| 3        | 2       | 2024-01-01 08:00:00 | view       |
+
+Expected result:
+
+| user_id | event_time          | event_type |
+| ------- | ------------------- | ---------- |
+| 1       | 2024-01-02 09:30:00 | click      |
+| 2       | 2024-01-01 08:00:00 | view       |
+
+## Constraints
+
+- `events.event_id` is the primary key.
+- `events.event_time` is not `NULL`.
+
+## Tips
+
+- `ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY event_time DESC, event_id DESC)` then keep `rn = 1`.
+- Without the `event_id` tiebreaker, ties are resolved arbitrarily.

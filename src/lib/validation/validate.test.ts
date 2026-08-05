@@ -4,6 +4,7 @@ import type { FixturePackage, QuestionPackage } from "@/content/types";
 import { validateSubmission, type FixtureDb, type QueryResult } from "./validate";
 import { loadAllFixtures, loadQuestion } from "@/content/loader";
 import { nodeLoader } from "@/content/node-loader";
+import { splitScriptStatements } from "./run";
 
 // A real sql.js-backed hook set so the validator is exercised end-to-end,
 // including actual SQL execution and result comparison.
@@ -105,5 +106,26 @@ describe("validateSubmission (integration)", () => {
       expect(o.reason).not.toContain("INSERT");
       expect(o.reason).not.toContain("VALUES");
     }
+  });
+
+  it("splits every fixture script into executable statements (no comment-only chunks)", async () => {
+    const fixtures = await loadAllFixtures(nodeLoader);
+    const SQL = await initSqlJs({ locateFile: () => require.resolve("sql.js/dist/sql-wasm.wasm") });
+    let executed = 0;
+    for (const f of fixtures) {
+      const stmts = splitScriptStatements(f.schemaSql + "\n" + f.fixtureSql);
+      expect(
+        stmts.length,
+        `fixture ${f.metadata.id}/${f.fixtureId} should yield statements`,
+      ).toBeGreaterThan(0);
+      const db = new SQL.Database();
+      for (const stmt of stmts) {
+        // Simulates the worker path: each split statement must execute standalone.
+        db.exec(stmt);
+        executed++;
+      }
+      db.close();
+    }
+    expect(executed).toBeGreaterThan(0);
   });
 });

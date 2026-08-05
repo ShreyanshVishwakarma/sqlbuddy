@@ -1,0 +1,37 @@
+{
+  "id": "rolling-average-sales",
+  "slug": "rolling-average-sales",
+  "title": "Seven-Day Rolling Average",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Aggregation", "Date Functions"],
+  "description": "Compute each sale's 7-day rolling average of amount, per account.",
+  "concepts": ["AVG OVER", "ROWS BETWEEN", "PARTITION BY"],
+  "expectedRowCount": 7,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Two accounts with enough rows to fill the window."
+    },
+    {
+      "id": "short-history",
+      "file": "short-history.sql",
+      "label": "Short history",
+      "description": "Fewer than seven rows: the window averages what exists."
+    },
+    {
+      "id": "null-amounts",
+      "file": "null-amounts.sql",
+      "label": "NULL amounts",
+      "description": "NULL amounts are ignored by AVG and shrink the window count."
+    }
+  ]
+}

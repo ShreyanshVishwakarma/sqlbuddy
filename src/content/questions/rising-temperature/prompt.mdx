@@ -1,0 +1,36 @@
+# Rising Temperature
+
+## Prompt
+
+Given the `weather` table below, write a query that returns the **`id` of every day whose temperature was strictly higher than the temperature of the **previous calendar day recorded in the table\*\* (the day before it, if that day exists in the table).
+
+- Only the `id` column should be returned.
+- The first recorded day has no previous day and can never qualify.
+- A day is **not** "higher" if the previous day's temperature was equal, lower, or missing.
+- `weather.temperature` may be `NULL`; comparisons involving `NULL` never qualify.
+
+## Example
+
+| id  | record_date | temperature |
+| --- | ----------- | ----------- |
+| 1   | 2024-01-01  | 10          |
+| 2   | 2024-01-02  | 25          |
+| 3   | 2024-01-03  | 20          |
+| 4   | 2024-01-04  | 30          |
+
+Expected result:
+
+| id  |
+| --- |
+| 2   |
+| 4   |
+
+## Constraints
+
+- `weather.id` is the primary key.
+- `record_date` has at most one row per day (single station).
+
+## Tips
+
+- `LAG(temperature) OVER (ORDER BY record_date)` attaches the previous day's temperature in one pass.
+- A self join on the previous date also works — the join key is unique, so no fan-out.

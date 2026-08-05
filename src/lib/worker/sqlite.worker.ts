@@ -60,6 +60,16 @@ function statementType(sql: string): string {
   return first && /^[A-Z]+$/.test(first) ? first : "UNKNOWN";
 }
 
+/** True when the SQL contains at least one non-comment statement. */
+function hasSqlStatement(sql: string): boolean {
+  return (
+    sql
+      .replace(/--[^\n]*/g, "")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .trim().length > 0
+  );
+}
+
 /** Executes one statement; returns its results or throws with a friendly message. */
 function runStatement(
   stmt: Statement,
@@ -98,6 +108,10 @@ function executeSql(
   const type = statementType(sql);
   if (type === "UNKNOWN")
     throw new Error(`Could not determine statement type from "${sql.trim().slice(0, 40)}…"`);
+
+  // Comment-only input (e.g. a "-- note" that slipped through splitting) has no
+  // statements; treat it as an empty query rather than a hard error.
+  if (!hasSqlStatement(sql)) throw new Error("Empty query.");
 
   // A single "query" may contain several statements separated by semicolons (e.g. a
   // CTE plus the final SELECT). Execute them in sequence and surface the last result set.

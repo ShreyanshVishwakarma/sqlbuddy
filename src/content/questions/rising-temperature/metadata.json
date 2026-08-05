@@ -1,0 +1,37 @@
+{
+  "id": "rising-temperature",
+  "slug": "rising-temperature",
+  "title": "Rising Temperature",
+  "difficulty": "easy",
+  "topics": ["Window Functions", "Self Join", "Date Functions"],
+  "description": "Find the ids of days when the temperature was higher than the previous day's.",
+  "concepts": ["LAG", "Self join", "Date arithmetic", "Strict comparison"],
+  "expectedRowCount": 3,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A single weather station with a few rising days."
+    },
+    {
+      "id": "gaps-and-flats",
+      "file": "gaps-and-flats.sql",
+      "label": "Gaps and flat days",
+      "description": "Missing calendar days and equal temperatures must not qualify."
+    },
+    {
+      "id": "null-temperatures",
+      "file": "null-temperatures.sql",
+      "label": "NULL temperatures",
+      "description": "NULL readings break the previous-day comparison."
+    }
+  ]
+}

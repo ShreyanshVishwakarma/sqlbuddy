@@ -1,0 +1,36 @@
+# Nth Highest Salary
+
+## Prompt
+
+Given the `employee` table below, write a query that returns the **third-highest distinct salary** (the `Nth`-highest with N = 3).
+
+- "Distinct" means identical salaries count once: salaries `100, 100, 95, 90` give distinct values `100, 95, 90`, so the third-highest is `90`.
+- If there are **fewer than three distinct salaries**, the query must return **one row with a `NULL` value** — not zero rows.
+- `NULL` salaries must be ignored.
+- The result should be a single column named `nth_highest_salary` with a single row.
+
+## Example
+
+| id  | salary |
+| --- | ------ |
+| 1   | 100    |
+| 2   | 100    |
+| 3   | 95     |
+| 4   | 90     |
+
+Expected result:
+
+| nth_highest_salary |
+| ------------------ |
+| 90                 |
+
+## Constraints
+
+- `employee.id` is the primary key.
+- `employee.salary` is nullable.
+
+## Tips
+
+- Rank the **distinct** salaries with `DENSE_RANK() OVER (ORDER BY salary DESC)` and keep rank 3.
+- Wrapping the filtered rank in an aggregate (`MAX`) guarantees one row, or `NULL` when empty.
+- You cannot reference a window alias in `WHERE` at the same level — use a subquery or CTE.

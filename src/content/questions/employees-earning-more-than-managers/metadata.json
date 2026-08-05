@@ -1,0 +1,37 @@
+{
+  "id": "employees-earning-more-than-managers",
+  "slug": "employees-earning-more-than-managers",
+  "title": "Employees Earning More Than Their Manager",
+  "difficulty": "easy",
+  "topics": ["JOINs", "Self Join", "NULL handling"],
+  "description": "Find employees whose salary is greater than their direct manager's salary.",
+  "concepts": ["Self join", "Aliasing", "Comparison with NULL"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A CEO, managers, and reports with a mix of salary relationships."
+    },
+    {
+      "id": "equal-salaries",
+      "file": "equal-salaries.sql",
+      "label": "Equal salaries",
+      "description": "Employees earning exactly the same as their manager must be excluded."
+    },
+    {
+      "id": "missing-managers",
+      "file": "missing-managers.sql",
+      "label": "Missing managers",
+      "description": "A dangling manager_id and an employee with no manager."
+    }
+  ]
+}

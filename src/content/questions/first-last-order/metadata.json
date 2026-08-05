@@ -1,0 +1,37 @@
+{
+  "id": "first-last-order",
+  "slug": "first-last-order",
+  "title": "First and Last Order Per Customer",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Aggregation", "Date Functions"],
+  "description": "Show the date of each customer's first and last order.",
+  "concepts": ["FIRST_VALUE/LAST_VALUE", "ROW_NUMBER", "Pivot via MAX(CASE)", "Tiebreakers"],
+  "expectedRowCount": 3,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Customers with several orders each."
+    },
+    {
+      "id": "single-order",
+      "file": "single-order.sql",
+      "label": "Single orders",
+      "description": "A customer with one order has first = last."
+    },
+    {
+      "id": "same-day-orders",
+      "file": "same-day-orders.sql",
+      "label": "Same-day orders",
+      "description": "Orders sharing a date require a deterministic tiebreaker."
+    }
+  ]
+}

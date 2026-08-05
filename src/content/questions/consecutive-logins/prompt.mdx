@@ -1,0 +1,37 @@
+# Consecutive Login Days
+
+## Prompt
+
+Given the `logins` table below (one row per login, possibly several per user per day), write a query that returns every user who logged in on **3 or more consecutive calendar days**.
+
+- Each qualifying user appears **once**, with a `consecutive_days` column showing the length of that consecutive run.
+- If a user has **two separate runs** of 3+ days, they appear once **per run**.
+- Multiple logins on the same day count as **one** day for streak purposes.
+- Only `user_id` and `consecutive_days` should be returned.
+
+## Example
+
+| user_id | login_at   |
+| ------- | ---------- |
+| 1       | 2024-01-01 |
+| 1       | 2024-01-02 |
+| 1       | 2024-01-03 |
+| 2       | 2024-01-01 |
+| 2       | 2024-01-03 |
+
+Expected result:
+
+| user_id | consecutive_days |
+| ------- | ---------------- |
+| 1       | 3                |
+
+## Constraints
+
+- `logins` has one row per login; a user can log in several times per day.
+- `logins.login_at` is a `DATE` and is not `NULL`.
+
+## Tips
+
+- Dedupe to one row per (user, day), then use the **gaps and islands** trick: `login_at - ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY login_at)` is constant for consecutive days.
+- In SQLite, subtract the row number with `julianday(login_at) - rn` or `date(login_at, '-' || rn || ' days')`.
+- Group by (user, island key) and keep `HAVING COUNT(*) >= 3`.

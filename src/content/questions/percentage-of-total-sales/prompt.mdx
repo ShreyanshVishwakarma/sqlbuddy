@@ -1,0 +1,34 @@
+# Percentage of Total Sales
+
+## Prompt
+
+Given the `sales` table below, write a query that returns, **for each region**, the percentage of **overall sales** that region contributes.
+
+- Output columns: `region` and `pct_of_total`, rounded to **2 decimal places**.
+- Order the result by `pct_of_total` **descending**, then by `region`.
+- `sales.amount` may be `NULL`; `NULL` amounts are ignored by `SUM`.
+
+## Example
+
+| id  | region | amount |
+| --- | ------ | ------ |
+| 1   | North  | 100    |
+| 2   | North  | 50     |
+| 3   | South  | 50     |
+
+Total = 200. Expected result:
+
+| region | pct_of_total |
+| ------ | ------------ |
+| North  | 75           |
+| South  | 25           |
+
+## Constraints
+
+- `sales.id` is the primary key.
+- `sales.amount` is nullable.
+
+## Tips
+
+- Aggregate to per-region totals, then use `SUM(region_total) OVER ()` to broadcast the grand total to every row.
+- `amount * 100.0 / grand_total` keeps the division in floating point so rounding behaves.

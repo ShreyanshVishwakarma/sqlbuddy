@@ -1,0 +1,34 @@
+# Duplicate Emails
+
+## Prompt
+
+Given the `person` table below, write a query that returns the **email address of every person whose email appears more than once**.
+
+- Each duplicate email should be returned **once**, regardless of how many times it appears.
+- Only the `email` column should be in the result.
+- `person.email` may be `NULL`; a `NULL` value is **not** an email and must not be treated as a duplicate.
+
+## Example
+
+| id  | email         |
+| --- | ------------- |
+| 1   | a@example.com |
+| 2   | b@example.com |
+| 3   | a@example.com |
+| 4   | c@example.com |
+
+Expected result:
+
+| email         |
+| ------------- |
+| a@example.com |
+
+## Constraints
+
+- `person.id` is the primary key.
+- `person.email` is nullable.
+
+## Tips
+
+- `GROUP BY email` then filter the groups with `HAVING COUNT(*) > 1`.
+- Remember that `HAVING` filters groups _after_ aggregation, while `WHERE` filters rows _before_.

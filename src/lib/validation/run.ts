@@ -65,29 +65,112 @@ export async function validateInWorker(
   return validateSubmission(question, fixtures, learnerSql, hooks);
 }
 
-/** Splits on semicolons that are outside string literals. */
+/** Splits on semicolons that are outside string literals and comments. Trailing
+ * comment-only chunks (e.g. a `-- note` after the final `;`) are dropped — they are
+ * not statements and would otherwise be rejected by the worker. */
 export function splitScriptStatements(sql: string): string[] {
   const out: string[] = [];
   let current = "";
   let inString = false;
+  let inLineComment = false;
+  let inBlockComment = false;
+  let dropComment = false; // true for comments at the start of a chunk (they belong
+  // to the already-emitted previous statement and must not leak into the next)
   for (let i = 0; i < sql.length; i++) {
     const ch = sql[i];
+    const next = sql[i + 1];
+
+    if (inLineComment) {
+      if (!dropComment) current += ch;
+      if (ch === "\n") inLineComment = false;
+      continue;
+    }
+    if (inBlockComment) {
+      if (ch === "*" && next === "/") {
+        inBlockComment = false;
+        if (!dropComment) current += "*/";
+        i++;
+      } else if (!dropComment) {
+        current += ch;
+      }
+      continue;
+    }
+    if (inString) {
+      current += ch;
+      if (ch === "'") {
+        if (next === "'") {
+          current += "'"; // escaped quote
+          i++;
+        } else {
+          inString = false;
+        }
+      }
+      continue;
+    }
+
     if (ch === "'") {
-      inString = !inString;
+      inString = true;
       current += ch;
       continue;
     }
-    if (ch === ";" && !inString) {
-      const t = current.trim();
-      if (t) out.push(t);
+    if (ch === "-" && next === "-") {
+      inLineComment = true;
+      // A comment at the start of a chunk belongs to the previous statement
+      // (already emitted at its semicolon) — drop it rather than keep it.
+      dropComment = current.trim() === "";
+      if (!dropComment) current += "--";
+      i++;
+      continue;
+    }
+    if (ch === "/" && next === "*") {
+      inBlockComment = true;
+      dropComment = current.trim() === "";
+      if (!dropComment) current += "/*";
+      i++;
+      continue;
+    }
+    if (ch === ";") {
+      const t = stripTrailingComments(current).trim();
+      if (hasSqlContent(t)) out.push(t);
       current = "";
+      dropComment = false;
       continue;
     }
     current += ch;
   }
-  const t = current.trim();
-  if (t) out.push(t);
+  const t = stripTrailingComments(current).trim();
+  if (hasSqlContent(t)) out.push(t);
   return out;
+}
+
+/** Removes trailing line/block comments from a statement chunk so a comment that
+ * follows the statement's semicolon never leaks into the next chunk. */
+function stripTrailingComments(text: string): string {
+  let out = text;
+  let changed = true;
+  while (changed) {
+    changed = false;
+    const line = out.match(/^(.*?)(--[^\n]*)$/);
+    if (line) {
+      out = line[1];
+      changed = true;
+    }
+    const block = out.match(/^(.*?)\/\*[\s\S]*?\*\/\s*$/);
+    if (block) {
+      out = block[1];
+      changed = true;
+    }
+  }
+  return out;
+}
+
+/** True when the text contains anything besides whitespace and SQL comments. */
+function hasSqlContent(text: string): boolean {
+  const stripped = text
+    .replace(/--[^\n]*/g, "")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .trim();
+  return stripped.length > 0;
 }
 
 /** FixtureDb backed by the worker client: exec/runQuery each round-trip to the worker. */

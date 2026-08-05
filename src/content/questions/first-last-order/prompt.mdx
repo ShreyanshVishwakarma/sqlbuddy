@@ -1,0 +1,34 @@
+# First and Last Order Per Customer
+
+## Prompt
+
+Given the `orders` table below, write a query that returns, **for each customer**, the date of their **first order** and the date of their **last order**.
+
+- Output columns: `customer_id`, `first_order_date`, `last_order_date`, ordered by `customer_id`.
+- A customer with exactly one order has `first_order_date = last_order_date`.
+- When two orders share the same date, use the order `id` as the tiebreaker (lower `id` is "earlier").
+
+## Example
+
+| id  | customer_id | order_date | amount |
+| --- | ----------- | ---------- | ------ |
+| 1   | 1           | 2024-01-10 | 50     |
+| 2   | 1           | 2024-01-13 | 30     |
+| 3   | 2           | 2024-02-01 | 90     |
+
+Expected result:
+
+| customer_id | first_order_date | last_order_date |
+| ----------- | ---------------- | --------------- |
+| 1           | 2024-01-10       | 2024-01-13      |
+| 2           | 2024-02-01       | 2024-02-01      |
+
+## Constraints
+
+- `orders.id` is the primary key.
+- `orders.order_date` is not `NULL`.
+
+## Tips
+
+- `FIRST_VALUE`/`LAST_VALUE` need an explicit full frame (`RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING`) — without it, `LAST_VALUE` only sees the current row.
+- A `ROW_NUMBER` ascending + descending pivot with `MAX(CASE ...)` also works and keeps one row per customer.

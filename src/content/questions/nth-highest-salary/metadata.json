@@ -1,0 +1,37 @@
+{
+  "id": "nth-highest-salary",
+  "slug": "nth-highest-salary",
+  "title": "Nth Highest Salary",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Subqueries", "NULL handling"],
+  "description": "Return the third-highest distinct salary, or NULL when it does not exist.",
+  "concepts": ["DENSE_RANK", "Subquery in FROM", "Aggregate wrapper", "NULL handling"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 10
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Distinct salaries with a clear third-highest value."
+    },
+    {
+      "id": "ties",
+      "file": "ties.sql",
+      "label": "Tied salaries",
+      "description": "Top salaries are tied; the third-highest distinct value still exists."
+    },
+    {
+      "id": "not-enough",
+      "file": "not-enough.sql",
+      "label": "Fewer than three",
+      "description": "Fewer than three distinct salaries: the result must be a NULL row."
+    }
+  ]
+}

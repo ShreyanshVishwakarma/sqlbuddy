@@ -1,0 +1,37 @@
+{
+  "id": "longest-login-streak",
+  "slug": "longest-login-streak",
+  "title": "Longest Login Streak",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "CTEs", "Gaps and Islands"],
+  "description": "For each user, the length of their longest run of consecutive login days.",
+  "concepts": ["Gaps and islands", "ROW_NUMBER", "MAX over groups", "DISTINCT"],
+  "expectedRowCount": 3,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Users with different longest streaks."
+    },
+    {
+      "id": "tied-streaks",
+      "file": "tied-streaks.sql",
+      "label": "Tied longest streaks",
+      "description": "A user with two equal-length runs returns that length once."
+    },
+    {
+      "id": "single-login",
+      "file": "single-login.sql",
+      "label": "Single logins",
+      "description": "A user with one login has a streak of 1."
+    }
+  ]
+}

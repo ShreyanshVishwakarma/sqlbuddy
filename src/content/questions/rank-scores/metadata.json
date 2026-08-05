@@ -1,0 +1,37 @@
+{
+  "id": "rank-scores",
+  "slug": "rank-scores",
+  "title": "Rank Scores",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Duplicate handling"],
+  "description": "Rank tournament scores so ties share a rank with no gaps.",
+  "concepts": ["DENSE_RANK", "RANK vs DENSE_RANK", "ORDER BY"],
+  "expectedRowCount": 5,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Scores with a clear tied pair at the top."
+    },
+    {
+      "id": "three-way-tie",
+      "file": "three-way-tie.sql",
+      "label": "Three-way tie",
+      "description": "Three identical top scores force dense ranks with no gaps."
+    },
+    {
+      "id": "null-scores",
+      "file": "null-scores.sql",
+      "label": "NULL scores",
+      "description": "NULL scores must not be ranked as values."
+    }
+  ]
+}

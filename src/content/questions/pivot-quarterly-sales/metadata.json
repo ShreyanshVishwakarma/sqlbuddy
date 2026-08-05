@@ -1,0 +1,37 @@
+{
+  "id": "pivot-quarterly-sales",
+  "slug": "pivot-quarterly-sales",
+  "title": "Pivot Quarterly Sales",
+  "difficulty": "medium",
+  "topics": ["Conditional Aggregation", "CASE WHEN", "GROUP BY"],
+  "description": "Pivot per-year sales rows into one row per year with a column per quarter.",
+  "concepts": ["CASE WHEN", "Conditional SUM", "Pivot", "NULL handling"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Two years with all four quarters present."
+    },
+    {
+      "id": "missing-quarters",
+      "file": "missing-quarters.sql",
+      "label": "Missing quarters",
+      "description": "A year with no sales in a quarter shows NULL in that column."
+    },
+    {
+      "id": "multiple-rows-per-quarter",
+      "file": "multiple-rows-per-quarter.sql",
+      "label": "Multiple rows per quarter",
+      "description": "Several sales rows in one quarter sum into a single column."
+    }
+  ]
+}

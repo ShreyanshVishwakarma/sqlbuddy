@@ -1,0 +1,37 @@
+# Seven-Day Rolling Average
+
+## Prompt
+
+Given the `sales` table below, write a query that returns **each sale** with a `rolling_avg` column: the average of that account's `amount` over the **current sale and the six preceding sales** (a 7-row window), ordered by `sale_date`.
+
+- The window must **reset per account**.
+- Round `rolling_avg` to **2 decimal places** with `ROUND(..., 2)`.
+- Output columns: `id`, `account_id`, `sale_date`, `amount`, `rolling_avg`.
+- Order the result by `account_id`, then `sale_date`, then `id`.
+- `sales.amount` may be `NULL`; `AVG` ignores `NULL` values (the window still counts 7 rows, but NULLs don't contribute).
+
+## Example
+
+| id  | account_id | sale_date  | amount |
+| --- | ---------- | ---------- | ------ |
+| 1   | 1          | 2024-01-01 | 10     |
+| 2   | 1          | 2024-01-02 | 20     |
+| 3   | 1          | 2024-01-03 | 30     |
+
+Expected result (window has only 3 rows so far):
+
+| id  | account_id | sale_date  | amount | rolling_avg |
+| --- | ---------- | ---------- | ------ | ----------- |
+| 1   | 1          | 2024-01-01 | 10     | 10          |
+| 2   | 1          | 2024-01-02 | 20     | 15          |
+| 3   | 1          | 2024-01-03 | 30     | 20          |
+
+## Constraints
+
+- `sales.id` is the primary key.
+- `sales.amount` is nullable.
+
+## Tips
+
+- `AVG(amount) OVER (PARTITION BY account_id ORDER BY sale_date, id ROWS BETWEEN 6 PRECEDING AND CURRENT ROW)`.
+- The frame is row-based: it averages the last 7 _rows_, not 7 calendar days.

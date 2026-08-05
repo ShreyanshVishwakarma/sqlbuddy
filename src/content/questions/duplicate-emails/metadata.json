@@ -1,0 +1,37 @@
+{
+  "id": "duplicate-emails",
+  "slug": "duplicate-emails",
+  "title": "Duplicate Emails",
+  "difficulty": "easy",
+  "topics": ["GROUP BY", "HAVING"],
+  "description": "List the email addresses that appear more than once in the person table.",
+  "concepts": ["GROUP BY", "HAVING", "COUNT", "NULL handling"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A few emails, one of which is duplicated."
+    },
+    {
+      "id": "triples-and-nulls",
+      "file": "triples-and-nulls.sql",
+      "label": "Triples and NULLs",
+      "description": "An email appearing three times and NULL email values."
+    },
+    {
+      "id": "no-duplicates",
+      "file": "no-duplicates.sql",
+      "label": "No duplicates",
+      "description": "Every email is unique; the result must be empty."
+    }
+  ]
+}
