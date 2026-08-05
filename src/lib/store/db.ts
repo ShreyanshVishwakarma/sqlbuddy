@@ -1,6 +1,6 @@
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 
-const DB_NAME = "sql-prep-lab";
+const DB_NAME = "sqlbuddy";
 const DB_VERSION = 1;
 
 export interface QuestionState {

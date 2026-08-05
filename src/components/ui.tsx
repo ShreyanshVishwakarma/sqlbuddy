@@ -53,14 +53,14 @@ export function Button({ variant = "secondary", className = "", children, ...res
   );
 }
 
-/** Brand mark — squircle, gradient-free, tabular wordmark. */
+/** Brand mark — squircle, gradient-free, monospace glyph. */
 export function Logo({ href = "/" }: { href?: string }) {
   return (
-    <Link href={href} className="group flex items-center gap-2.5" aria-label="SQL Prep Lab home">
-      <span className="bg-accent text-accent-foreground shadow-tinted flex h-7 w-7 items-center justify-center rounded-lg text-[13px] font-bold transition-transform duration-200 group-hover:-rotate-3">
-        SQL
+    <Link href={href} className="group flex items-center gap-2.5" aria-label="sqlbuddy home">
+      <span className="bg-accent text-accent-foreground shadow-tinted flex h-7 w-7 items-center justify-center rounded-lg font-mono text-[12px] font-bold transition-transform duration-200 group-hover:-rotate-3">
+        &gt;_
       </span>
-      <span className="text-foreground text-[15px] font-semibold tracking-tight">SQL Prep Lab</span>
+      <span className="text-foreground text-[15px] font-semibold tracking-tight">sqlbuddy</span>
     </Link>
   );
 }

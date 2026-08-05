@@ -56,7 +56,7 @@ export function SiteFooter() {
   return (
     <footer className="border-border border-t py-8">
       <div className="text-muted mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-xs sm:flex-row sm:px-6">
-        <p>SQL Prep Lab — practice SQL interviews entirely in your browser.</p>
+        <p>sqlbuddy — practice SQL interviews entirely in your browser.</p>
         <nav aria-label="Footer" className="flex items-center gap-4">
           <Link
             href="/settings"

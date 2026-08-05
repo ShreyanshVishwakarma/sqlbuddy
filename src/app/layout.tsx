@@ -12,13 +12,13 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: {
-    default: "SQL Prep Lab — Practice SQL Interview Questions in Your Browser",
-    template: "%s · SQL Prep Lab",
+    default: "sqlbuddy — Practice SQL Interview Questions in Your Browser",
+    template: "%s · sqlbuddy",
   },
   description:
     "Practice SQL interview questions with a real SQLite database that runs entirely in your browser. No server, no sign-up — just questions, queries, and instant pass/fail feedback.",
   openGraph: {
-    title: "SQL Prep Lab",
+    title: "sqlbuddy",
     description:
       "Practice SQL interview questions against a real SQLite database, entirely in your browser.",
     type: "website",

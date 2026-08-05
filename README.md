@@ -1,4 +1,4 @@
-# SQL Prep Lab
+# sqlbuddy
 
 Practice SQL interview questions with a **real SQLite database that runs entirely in your browser**. No backend, no sign-up, no accounts — every query you write executes locally via SQLite compiled to WebAssembly, and your drafts and progress persist only in your browser's IndexedDB.
 
@@ -10,7 +10,7 @@ Interview practice is interactive: you write SQL, run it, and see results immedi
 - a way for your SQL to touch someone else's infrastructure;
 - privacy concerns about what you type and where it goes.
 
-SQL Prep Lab sidesteps all of that. The **entire SQLite engine ships to the browser as WebAssembly** and runs inside a dedicated Web Worker. Queries never leave the device, latency is zero, and the app deploys as static files on Vercel with no Functions and no database.
+sqlbuddy sidesteps all of that. The **entire SQLite engine ships to the browser as WebAssembly** and runs inside a dedicated Web Worker. Queries never leave the device, latency is zero, and the app deploys as static files on Vercel with no Functions and no database.
 
 ## Local-first architecture
 

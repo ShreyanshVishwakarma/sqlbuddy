@@ -18,10 +18,6 @@ export default async function HomePage() {
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,var(--accent-soft),transparent_60%),radial-gradient(40%_40%_at_90%_20%,rgba(13,148,136,0.06),transparent_60%)]"
         />
         <div className="relative mx-auto max-w-6xl px-4 pt-20 pb-20 sm:px-6 sm:pt-28 sm:pb-28">
-          <p className="bg-surface text-muted-foreground ring-border mb-5 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset">
-            <span className="bg-success h-1.5 w-1.5 rounded-full" aria-hidden />
-            Runs entirely in your browser
-          </p>
           <h1 className="text-foreground max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
             Practice SQL with a real database, right in the browser.
           </h1>
