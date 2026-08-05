@@ -1,4 +1,3 @@
-SELECT event_date, COUNT(DISTINCT user_id) AS active_users
+SELECT user_id, event_date, event_type
 FROM activity
-GROUP BY event_date
-ORDER BY event_date;
+LIMIT 5;

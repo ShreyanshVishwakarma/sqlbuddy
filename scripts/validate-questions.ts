@@ -71,6 +71,8 @@ async function main(): Promise<void> {
       const starterResult = db.exec(question.starterSql);
       const referenceResult = db.exec(question.referenceSql);
 
+      // The starter is a scaffold (exploration query), not the answer — but it must
+      // still execute and return rows so the workspace never opens empty.
       if (starterResult.length === 0 || starterResult[0].values.length === 0) {
         fail("starter.sql returns no rows — the workspace would open empty");
       } else {

@@ -1,4 +1,3 @@
-SELECT DISTINCT author_id AS id
+SELECT article_id, author_id, viewer_id
 FROM views
-WHERE author_id = viewer_id
-ORDER BY id;
+LIMIT 5;

@@ -1,13 +1,3 @@
-WITH distinct_salaries AS (
-    SELECT DISTINCT salary
-    FROM employee
-    WHERE salary IS NOT NULL
-),
-ranked AS (
-    SELECT salary,
-           DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
-    FROM distinct_salaries
-)
-SELECT MAX(salary) AS nth_highest_salary
-FROM ranked
-WHERE rnk = 3;
+SELECT id, name, salary
+FROM employee
+ORDER BY salary DESC;

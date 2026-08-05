@@ -93,8 +93,8 @@ src/content/questions/<slug>/
   prompt.mdx        # Markdown prompt (rendered by a tiny built-in renderer)
   schema.sql        # CREATE TABLE statements
   seed.sql          # visible sample data (shown to the learner)
-  starter.sql       # initial editor content
-  reference.sql     # trusted solution (never shown to the learner)
+  starter.sql       # exploration scaffold shown initially (never the answer)
+  reference.sql     # trusted solution, revealed via the "Answer" toggle
   fixtures/         # extra datasets, each an edge case for validation
     base.sql
     duplicates.sql

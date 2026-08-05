@@ -64,9 +64,25 @@ test.describe("practice workspace", () => {
     await expect(page.getByText("SQLite ready")).toBeVisible({ timeout: 30000 });
   });
 
-  test("runs valid SQL and renders results", async ({ page }) => {
+  test("runs the scaffold starter SQL and renders results", async ({ page }) => {
+    // The starter is now a scaffold (SELECT * ...), not the answer.
     await runCurrentQuery(page);
+    await expect(page.getByRole("cell", { name: "100" }).first()).toBeVisible();
+  });
+
+  test("toggles the answer into the editor and hides it again", async ({ page }) => {
+    await page.getByRole("button", { name: "Answer" }).click();
+    // The reference for second-highest-salary returns the scalar 90.
+    await page.getByRole("button", { name: "Run ▸" }).click();
     await expect(page.getByRole("cell", { name: "90" }).first()).toBeVisible();
+    // Run/Submit are disabled while the answer is showing.
+    await expect(page.getByRole("button", { name: "Submit" })).toBeDisabled();
+
+    await page.getByRole("button", { name: "Hide answer" }).click();
+    // Draft is restored: the scaffold starter begins with SELECT id, name, salary.
+    await expect(page.getByRole("textbox").first()).toBeVisible();
+    await runCurrentQuery(page);
+    await expect(page.getByRole("cell", { name: "100" }).first()).toBeVisible();
   });
 
   test("runs invalid SQL and shows the error UI", async ({ page }) => {

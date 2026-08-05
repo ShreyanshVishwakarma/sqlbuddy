@@ -43,6 +43,7 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
   const router = useRouter();
 
   const [editorValue, setEditorValue] = useState<string>(question.starterSql);
+  const [answerVisible, setAnswerVisible] = useState(false);
   const [engine, setEngine] = useState<EngineStatus>("initializing");
   const [engineErrorMessage, setEngineErrorMessage] = useState<string | null>(null);
   const [tables, setTables] = useState<TableInfo[] | null>(null);
@@ -57,6 +58,7 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
   const clientRef = useRef<SqliteWorkerClient | null>(null);
   const notesDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
   const draftDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const draftBeforeAnswer = useRef<string | null>(null);
 
   // ---- Engine lifecycle: created once on mount, disposed on unmount ----
   useEffect(() => {
@@ -110,12 +112,14 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
   const handleEditorChange = useCallback(
     (value: string) => {
       setEditorValue(value);
+      // Never persist the reference answer as a draft.
+      if (answerVisible) return;
       if (draftDebounce.current) clearTimeout(draftDebounce.current);
       draftDebounce.current = setTimeout(() => {
         void saveDraft(metadata.id, value);
       }, 400);
     },
-    [metadata.id],
+    [metadata.id, answerVisible],
   );
 
   // ---- Notes autosave ----
@@ -212,6 +216,23 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
     setBookmarked(next);
   }, [metadata.id]);
 
+  // Toggles the reference answer in the editor. The learner's draft is preserved
+  // and restored exactly when the answer is hidden again.
+  const handleToggleAnswer = useCallback(() => {
+    setAnswerVisible((visible) => {
+      if (visible) {
+        if (draftBeforeAnswer.current !== null) {
+          setEditorValue(draftBeforeAnswer.current);
+          draftBeforeAnswer.current = null;
+        }
+        return false;
+      }
+      draftBeforeAnswer.current = editorValue;
+      setEditorValue(question.referenceSql);
+      return true;
+    });
+  }, [editorValue, question.referenceSql]);
+
   const goToNext = useCallback(() => {
     if (nextSlug) router.push(`/practice/${nextSlug}`);
   }, [nextSlug, router]);
@@ -262,6 +283,17 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
             {engine === "ready" ? "SQLite ready" : "Initializing…"}
           </span>
           <button
+            onClick={handleToggleAnswer}
+            aria-pressed={answerVisible}
+            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-150 active:scale-[0.98] ${
+              answerVisible
+                ? "bg-accent text-accent-foreground hover:bg-accent-strong"
+                : "text-muted-foreground ring-border-strong hover:bg-surface-muted hover:text-foreground ring-1 ring-inset"
+            }`}
+          >
+            {answerVisible ? "Hide answer" : "Answer"}
+          </button>
+          <button
             onClick={handleReset}
             disabled={running || engine !== "ready"}
             className="text-muted-foreground ring-border-strong hover:bg-surface-muted hover:text-foreground rounded-md px-3 py-1.5 text-sm font-medium ring-1 transition-all duration-150 ring-inset active:scale-[0.98] disabled:opacity-50"
@@ -277,7 +309,7 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={running || engine !== "ready"}
+            disabled={running || engine !== "ready" || answerVisible}
             className="bg-accent text-accent-foreground hover:bg-accent-strong rounded-md px-4 py-1.5 text-sm font-semibold transition-all duration-150 active:scale-[0.98] disabled:opacity-50"
           >
             Submit
@@ -328,6 +360,7 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
               onChange={handleEditorChange}
               onRun={() => void handleRun()}
               onSubmit={() => void handleSubmit()}
+              disabled={answerVisible}
             />
           </div>
 

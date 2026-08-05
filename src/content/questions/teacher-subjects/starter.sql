@@ -1,4 +1,3 @@
-SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt
+SELECT teacher_id, subject_id, dept_id
 FROM teacher
-GROUP BY teacher_id
-ORDER BY teacher_id;
+LIMIT 5;

@@ -1,3 +1,3 @@
-SELECT tweet_id
+SELECT tweet_id, content
 FROM tweets
-WHERE LENGTH(content) > 15;
+LIMIT 5;

@@ -1,5 +1,3 @@
-SELECT id, score,
-       DENSE_RANK() OVER (ORDER BY score DESC) AS rank
+SELECT id, score
 FROM scores
-WHERE score IS NOT NULL
-ORDER BY rank, id;
+ORDER BY score DESC;

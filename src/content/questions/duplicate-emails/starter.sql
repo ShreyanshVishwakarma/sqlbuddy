@@ -1,4 +1,3 @@
-SELECT email
+SELECT id, email
 FROM person
-GROUP BY email
-HAVING COUNT(*) > 1;
+ORDER BY id;

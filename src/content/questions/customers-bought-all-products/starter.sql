@@ -1,5 +1,4 @@
-SELECT customer_id
+SELECT customer_id, product_key
 FROM customer
-GROUP BY customer_id
-HAVING COUNT(DISTINCT product_key) = (SELECT COUNT(*) FROM product)
-ORDER BY customer_id;
+ORDER BY customer_id
+LIMIT 10;
