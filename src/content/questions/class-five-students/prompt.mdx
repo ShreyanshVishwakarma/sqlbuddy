@@ -1,0 +1,34 @@
+# Classes With At Least 5 Students
+
+## Prompt
+
+Given the `courses` table below (one row per student enrollment), write a query that returns the `class` of every class with **at least five students**.
+
+- Output a single column: `class`.
+- The order of the result does not matter.
+- Each row is one enrollment; count rows per class.
+
+## Example
+
+| student | class   |
+| ------- | ------- |
+| A       | Math    |
+| B       | Math    |
+| C       | Math    |
+| D       | Math    |
+| E       | Math    |
+| F       | English |
+
+Expected result:
+
+| class |
+| ----- |
+| Math  |
+
+## Constraints
+
+- There is no primary key; a student may have duplicate rows for the same class.
+
+## Tips
+
+- `GROUP BY class` then `HAVING COUNT(*) >= 5`.

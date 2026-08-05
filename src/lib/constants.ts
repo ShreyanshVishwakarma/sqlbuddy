@@ -8,6 +8,11 @@
  */
 export const QUESTION_SLUGS: string[] = [
   // Basics
+  "recyclable-low-fat-products",
+  "find-customer-referee",
+  "big-countries",
+  "article-views",
+  "invalid-tweets",
   "duplicate-emails",
   "employees-earning-more-than-managers",
   "rising-temperature",
@@ -18,10 +23,18 @@ export const QUESTION_SLUGS: string[] = [
   "employees-per-department",
   "percentage-of-total-sales",
   "pivot-quarterly-sales",
+  "teacher-subjects",
+  "class-five-students",
   // Joins & subqueries
   "nth-highest-salary",
+  "visited-no-transactions",
+  "process-machine-time",
+  "employee-bonus",
+  "customers-bought-all-products",
   // CTEs & dates
   "orders-gap-analysis",
+  "immediate-food-delivery",
+  "game-play-activity",
   // Window functions
   "rank-scores",
   "running-total",
@@ -30,9 +43,13 @@ export const QUESTION_SLUGS: string[] = [
   "latest-event-per-user",
   "monthly-sales-ranking",
   "top-three-per-category",
+  "consecutive-numbers",
+  "exchange-seats",
   // Gaps & islands
   "consecutive-logins",
   "longest-login-streak",
+  // Unions & relational division
+  "friend-requests-most-friends",
 ];
 
 /** Constant path (relative to public/) where the sql.js WASM binary is served from. */

@@ -1,0 +1,32 @@
+# Recyclable and Low Fat Products
+
+## Prompt
+
+Given the `products` table below, write a query that returns the `product_id` of every product that is **both low fat and recyclable**.
+
+- Output a single column: `product_id`.
+- The order of the result does not matter.
+- `low_fats` and `recyclable` are flags: `'Y'` means yes, `'N'` means no, and **`NULL` means unknown** — an unknown value is not a yes.
+
+## Example
+
+| product_id | low_fats | recyclable |
+| ---------- | -------- | ---------- |
+| 1          | Y        | N          |
+| 2          | Y        | Y          |
+| 3          | N        | Y          |
+
+Expected result:
+
+| product_id |
+| ---------- |
+| 2          |
+
+## Constraints
+
+- `products.product_id` is the primary key.
+- `low_fats` and `recyclable` are nullable.
+
+## Tips
+
+- A plain `WHERE low_fats = 'Y' AND recyclable = 'Y'` already handles `NULL` correctly — a `NULL` never equals `'Y'`.

@@ -1,0 +1,29 @@
+# Invalid Tweets
+
+## Prompt
+
+Given the `tweets` table below, write a query that returns the `tweet_id` of every tweet whose **content is longer than 15 characters**.
+
+- A tweet is _invalid_ when `LENGTH(content) > 15`.
+- Output a single column: `tweet_id`.
+
+## Example
+
+| tweet_id | content                  |
+| -------- | ------------------------ |
+| 1        | Let us code              |
+| 2        | More than fifteen chars! |
+
+Expected result:
+
+| tweet_id |
+| -------- |
+| 2        |
+
+## Constraints
+
+- `tweets.tweet_id` is the primary key.
+
+## Tips
+
+- In SQLite, `LENGTH(content)` counts characters — exactly what we want here.

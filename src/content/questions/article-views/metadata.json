@@ -1,0 +1,37 @@
+{
+  "id": "article-views",
+  "slug": "article-views",
+  "title": "Article Views I",
+  "difficulty": "easy",
+  "topics": ["SELECT", "WHERE", "DISTINCT", "Sorting"],
+  "description": "Find the authors who viewed their own articles at least once.",
+  "concepts": ["DISTINCT", "WHERE", "ORDER BY"],
+  "expectedRowCount": 3,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A few authors who viewed their own and others' articles."
+    },
+    {
+      "id": "many-self-views",
+      "file": "many-self-views.sql",
+      "label": "Repeated self views",
+      "description": "An author viewing the same article several times appears once."
+    },
+    {
+      "id": "no-self-views",
+      "file": "no-self-views.sql",
+      "label": "No self views",
+      "description": "Nobody viewed their own article; the result must be empty."
+    }
+  ]
+}

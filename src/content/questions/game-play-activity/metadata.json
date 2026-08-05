@@ -1,0 +1,37 @@
+{
+  "id": "game-play-activity",
+  "slug": "game-play-activity",
+  "title": "Game Play Analysis IV",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Aggregation", "Date Functions"],
+  "description": "Find the fraction of players who logged in the day after their first login.",
+  "concepts": ["MIN over partition", "julianday", "LEFT JOIN", "Percentage"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Players who did and did not return the next day."
+    },
+    {
+      "id": "all-return",
+      "file": "all-return.sql",
+      "label": "All return",
+      "description": "Every player logs in the day after their first login."
+    },
+    {
+      "id": "none-return",
+      "file": "none-return.sql",
+      "label": "None return",
+      "description": "No player returns the next day."
+    }
+  ]
+}

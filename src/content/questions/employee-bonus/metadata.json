@@ -1,0 +1,37 @@
+{
+  "id": "employee-bonus",
+  "slug": "employee-bonus",
+  "title": "Employee Bonus",
+  "difficulty": "easy",
+  "topics": ["JOINs", "LEFT JOIN", "NULL handling"],
+  "description": "Report every employee's name and bonus, including those with none.",
+  "concepts": ["LEFT JOIN", "COALESCE", "NULL comparison"],
+  "expectedRowCount": 3,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Employees with and without bonuses."
+    },
+    {
+      "id": "null-bonus",
+      "file": "null-bonus.sql",
+      "label": "NULL bonuses",
+      "description": "An employee with a NULL bonus must still appear with NULL."
+    },
+    {
+      "id": "all-bonused",
+      "file": "all-bonused.sql",
+      "label": "Everyone bonused",
+      "description": "Every employee has a bonus below 1000."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+# Consecutive Numbers
+
+## Prompt
+
+Given the `logs` table below (rows ordered by `id`), write a query that returns the **distinct numbers that appear three or more times consecutively** — that is, in at least three adjacent rows.
+
+- Output a single column: `consecutive_num`.
+- Each qualifying number appears **once**, even if it has several runs.
+
+## Example
+
+| id  | num |
+| --- | --- |
+| 1   | 1   |
+| 2   | 1   |
+| 3   | 1   |
+| 4   | 2   |
+| 5   | 1   |
+| 6   | 2   |
+| 7   | 2   |
+
+Expected result:
+
+| consecutive_num |
+| --------------- |
+| 1               |
+
+## Constraints
+
+- `logs.id` is the primary key and is contiguous (no gaps).
+
+## Tips
+
+- Compare each row with the two previous rows using `LAG(num, 1)` and `LAG(num, 2)`.
+- `num` may be `NULL` in some variants — a run of three `NULL`s still counts here only if your comparison treats them as equal; in SQLite `NULL = NULL` is false, so filter with `num IS NOT NULL` or use a self join.

@@ -1,0 +1,34 @@
+# Immediate Food Delivery
+
+## Prompt
+
+Given the `delivery` table below (one row per delivery), write a query that reports the **percentage of immediate first orders** — orders that are a customer's **first order** (earliest `order_date`; ties broken by the smaller `customer_pref_delivery_date`) **and** were delivered on the preferred date.
+
+- An order is "immediate" when `order_date = customer_pref_delivery_date`.
+- Output a single column `immediate_percentage` rounded to **2 decimal places** (`ROUND(..., 2)`).
+
+## Example
+
+| delivery_id | customer_id | order_date | customer_pref_delivery_date |
+| ----------- | ----------- | ---------- | --------------------------- |
+| 1           | 1           | 2024-01-01 | 2024-01-01                  |
+| 2           | 1           | 2024-01-02 | 2024-01-03                  |
+| 3           | 2           | 2024-01-02 | 2024-01-02                  |
+
+First orders: customer 1 → delivery 1 (immediate), customer 2 → delivery 3 (immediate). Both immediate → 100.0.
+
+Expected result:
+
+| immediate_percentage |
+| -------------------- |
+| 100                  |
+
+## Constraints
+
+- `delivery.delivery_id` is the primary key.
+- A customer's first order is the one with the smallest `order_date`; if tied, the smallest `customer_pref_delivery_date`.
+
+## Tips
+
+- Rank orders per customer with `ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date, customer_pref_delivery_date)`, keep `rn = 1`, then average `CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END`.
+- `ROUND(100.0 * SUM(is_immediate) / COUNT(*), 2)` keeps the division in floating point.

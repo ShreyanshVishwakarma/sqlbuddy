@@ -1,0 +1,37 @@
+{
+  "id": "invalid-tweets",
+  "slug": "invalid-tweets",
+  "title": "Invalid Tweets",
+  "difficulty": "easy",
+  "topics": ["SELECT", "WHERE", "String Functions"],
+  "description": "Find tweets whose content is longer than 15 characters.",
+  "concepts": ["LENGTH", "String comparison"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Tweets above and below the 15-character threshold."
+    },
+    {
+      "id": "exactly-fifteen",
+      "file": "exactly-fifteen.sql",
+      "label": "Exactly 15 characters",
+      "description": "A 15-character tweet is valid and excluded."
+    },
+    {
+      "id": "all-valid",
+      "file": "all-valid.sql",
+      "label": "All valid",
+      "description": "Every tweet is short; the result must be empty."
+    }
+  ]
+}

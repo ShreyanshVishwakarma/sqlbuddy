@@ -1,0 +1,37 @@
+{
+  "id": "friend-requests-most-friends",
+  "slug": "friend-requests-most-friends",
+  "title": "Users With the Most Friends",
+  "difficulty": "medium",
+  "topics": ["UNION ALL", "GROUP BY", "Aggregation"],
+  "description": "Find the user(s) with the largest number of friends.",
+  "concepts": ["UNION ALL", "COUNT", "MAX over count"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A clear top user by friend count."
+    },
+    {
+      "id": "ties",
+      "file": "ties.sql",
+      "label": "Tied counts",
+      "description": "Two users share the largest friend count; both appear."
+    },
+    {
+      "id": "mutual",
+      "file": "mutual.sql",
+      "label": "Mutual friendship",
+      "description": "A reciprocal pair counts each direction."
+    }
+  ]
+}

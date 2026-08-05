@@ -1,0 +1,36 @@
+# Users With the Most Friends
+
+## Prompt
+
+Given the `request_accepted` table below (one row per accepted friendship request), write a query that returns the **user(s) with the most friends**, where each row `(requester_id, accepter_id)` means those two users are friends.
+
+- Output columns: `id` and `num` (the friend count).
+- If **several users tie** for the most friends, return **all of them**.
+- Order the result by `id`.
+
+## Example
+
+| requester_id | accepter_id | accept_date |
+| ------------ | ----------- | ----------- |
+| 1            | 2           | 2024-01-01  |
+| 1            | 3           | 2024-01-02  |
+| 2            | 3           | 2024-01-03  |
+| 3            | 4           | 2024-01-04  |
+
+Friend counts: 1 → 2 friends, 2 → 2 friends, 3 → 3 friends, 4 → 1 friend.
+
+Expected result:
+
+| id  | num |
+| --- | --- |
+| 3   | 3   |
+
+## Constraints
+
+- `request_accepted` has no primary key; a request may repeat.
+- Friendship is not necessarily reciprocal in the data.
+
+## Tips
+
+- `UNION ALL` the requester and accepter columns into one column of user ids, then count per id.
+- Keep only the rows whose count equals the overall maximum (a subquery or a window `MAX`).

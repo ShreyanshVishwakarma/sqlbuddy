@@ -1,0 +1,37 @@
+{
+  "id": "process-machine-time",
+  "slug": "process-machine-time",
+  "title": "Average Process Time Per Machine",
+  "difficulty": "easy",
+  "topics": ["JOINs", "Aggregation", "Self Join"],
+  "description": "Compute each machine's average time to complete a process.",
+  "concepts": ["Self join", "Self-join on composite key", "AVG", "ROUND", "CASE WHEN"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Two machines with several start/end pairs."
+    },
+    {
+      "id": "multiple-activities",
+      "file": "multiple-activities.sql",
+      "label": "Multiple activities",
+      "description": "Processes with several activity steps before the end."
+    },
+    {
+      "id": "single-process",
+      "file": "single-process.sql",
+      "label": "Single process",
+      "description": "One process per machine produces the simplest average."
+    }
+  ]
+}

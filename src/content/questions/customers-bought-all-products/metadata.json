@@ -1,0 +1,37 @@
+{
+  "id": "customers-bought-all-products",
+  "slug": "customers-bought-all-products",
+  "title": "Customers Who Bought All Products",
+  "difficulty": "medium",
+  "topics": ["Subqueries", "GROUP BY", "HAVING"],
+  "description": "Find customers who have purchased every product in the catalogue.",
+  "concepts": ["HAVING COUNT(DISTINCT)", "Subquery", "Relational division"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "One customer bought everything; others did not."
+    },
+    {
+      "id": "repeated-purchases",
+      "file": "repeated-purchases.sql",
+      "label": "Repeated purchases",
+      "description": "Buying the same product twice does not count extra."
+    },
+    {
+      "id": "nobody-completes",
+      "file": "nobody-completes.sql",
+      "label": "Nobody completes",
+      "description": "No customer bought every product; the result must be empty."
+    }
+  ]
+}

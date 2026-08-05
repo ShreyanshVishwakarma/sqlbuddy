@@ -1,0 +1,37 @@
+{
+  "id": "exchange-seats",
+  "slug": "exchange-seats",
+  "title": "Exchange Seats",
+  "difficulty": "medium",
+  "topics": ["CASE WHEN", "Subqueries", "Odd/Even"],
+  "description": "Swap the student in each adjacent pair of seats.",
+  "concepts": ["CASE WHEN", "Odd/even", "Correlated subquery"],
+  "expectedRowCount": 5,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Five students; the last odd seat keeps its student."
+    },
+    {
+      "id": "even-count",
+      "file": "even-count.sql",
+      "label": "Even number of seats",
+      "description": "All seats swap cleanly in pairs."
+    },
+    {
+      "id": "single-student",
+      "file": "single-student.sql",
+      "label": "Single student",
+      "description": "One student stays put."
+    }
+  ]
+}

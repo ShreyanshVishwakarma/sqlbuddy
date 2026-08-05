@@ -1,0 +1,37 @@
+{
+  "id": "teacher-subjects",
+  "slug": "teacher-subjects",
+  "title": "Subjects Taught By Each Teacher",
+  "difficulty": "easy",
+  "topics": ["GROUP BY", "Aggregation", "Duplicate handling"],
+  "description": "Count the distinct subjects each teacher teaches.",
+  "concepts": ["COUNT(DISTINCT)", "GROUP BY"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": true,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Teachers with overlapping subjects."
+    },
+    {
+      "id": "repeated-subjects",
+      "file": "repeated-subjects.sql",
+      "label": "Repeated rows",
+      "description": "A (teacher, subject) pair repeated in the table counts once."
+    },
+    {
+      "id": "single-teacher",
+      "file": "single-teacher.sql",
+      "label": "Single teacher",
+      "description": "One teacher with several subjects."
+    }
+  ]
+}

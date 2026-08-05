@@ -1,0 +1,37 @@
+{
+  "id": "visited-no-transactions",
+  "slug": "visited-no-transactions",
+  "title": "Visits Without Transactions",
+  "difficulty": "easy",
+  "topics": ["JOINs", "GROUP BY", "NULL handling"],
+  "description": "Count visits with no transactions per customer.",
+  "concepts": ["LEFT JOIN", "Anti-join", "GROUP BY", "COUNT"],
+  "expectedRowCount": 2,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Visits with and without matching transactions."
+    },
+    {
+      "id": "multiple-transactions",
+      "file": "multiple-transactions.sql",
+      "label": "Multiple transactions",
+      "description": "A visit with several transactions still counts as zero no-transaction visits."
+    },
+    {
+      "id": "all-purchased",
+      "file": "all-purchased.sql",
+      "label": "All visits purchased",
+      "description": "Every visit has a transaction; the result must be empty."
+    }
+  ]
+}

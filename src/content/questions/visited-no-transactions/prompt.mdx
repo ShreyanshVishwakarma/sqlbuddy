@@ -1,0 +1,38 @@
+# Visits Without Transactions
+
+## Prompt
+
+Given the `visits` and `transactions` tables below, write a query that reports, **for each customer**, how many of their visits ended with **no transaction** — that is, visits with no matching row in `transactions`.
+
+- Output columns: `customer_id` and `count_no_trans`.
+- Only customers with **at least one** transaction-less visit appear.
+- A visit is matched to a transaction on `visit_id`.
+
+## Example
+
+| visit_id | customer_id |
+| -------- | ----------- |
+| 1        | 23          |
+| 2        | 9           |
+| 3        | 23          |
+
+| transaction_id | visit_id | amount |
+| -------------- | -------- | ------ |
+| 12             | 2        | 310    |
+| 13             | 1        | 70     |
+
+Expected result:
+
+| customer_id | count_no_trans |
+| ----------- | -------------- |
+| 23          | 1              |
+
+## Constraints
+
+- `visits.visit_id` and `transactions.transaction_id` are primary keys.
+- A visit may have zero, one, or several transactions.
+
+## Tips
+
+- `LEFT JOIN` visits to transactions and keep rows where the transaction id is `NULL`, then group by customer.
+- `NOT EXISTS` also works and avoids the fan-out entirely.

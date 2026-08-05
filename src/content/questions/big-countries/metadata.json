@@ -1,0 +1,37 @@
+{
+  "id": "big-countries",
+  "slug": "big-countries",
+  "title": "Big Countries",
+  "difficulty": "easy",
+  "topics": ["SELECT", "WHERE"],
+  "description": "Find countries with a large area or population.",
+  "concepts": ["SELECT", "WHERE OR", "Column aliases"],
+  "expectedRowCount": 4,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A mix of countries, some big by area or population."
+    },
+    {
+      "id": "boundaries",
+      "file": "boundaries.sql",
+      "label": "Boundary values",
+      "description": "Countries exactly at the thresholds still qualify."
+    },
+    {
+      "id": "none-big",
+      "file": "none-big.sql",
+      "label": "None big",
+      "description": "No country meets either threshold."
+    }
+  ]
+}

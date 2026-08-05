@@ -1,0 +1,37 @@
+{
+  "id": "consecutive-numbers",
+  "slug": "consecutive-numbers",
+  "title": "Consecutive Numbers",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "LAG", "Duplicate handling"],
+  "description": "Find numbers that appear three or more times in a row.",
+  "concepts": ["LAG", "Window functions", "Consecutive detection"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A run of three and shorter runs."
+    },
+    {
+      "id": "longer-runs",
+      "file": "longer-runs.sql",
+      "label": "Longer runs",
+      "description": "A run longer than three still reports the number once."
+    },
+    {
+      "id": "no-run",
+      "file": "no-run.sql",
+      "label": "No runs of three",
+      "description": "Only pairs; the result must be empty."
+    }
+  ]
+}

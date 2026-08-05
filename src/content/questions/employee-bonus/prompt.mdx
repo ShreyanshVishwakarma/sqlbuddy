@@ -1,0 +1,40 @@
+# Employee Bonus
+
+## Prompt
+
+Given the `employee` and `bonus` tables below, write a query that returns **every employee whose bonus is less than 1000, or who has no bonus at all**.
+
+- Output columns: `name` and `bonus`.
+- An employee with no bonus row (or a `NULL` bonus) must appear with `bonus = NULL`.
+- Only the `name` and `bonus` columns should be returned.
+
+## Example
+
+| emp_id | name  | salary |
+| ------ | ----- | ------ |
+| 1      | Alice | 100    |
+| 2      | Bob   | 200    |
+| 3      | Carol | 300    |
+
+| emp_id | bonus |
+| ------ | ----- |
+| 1      | 500   |
+| 2      | 2000  |
+
+Expected result:
+
+| name  | bonus |
+| ----- | ----- |
+| Alice | 500   |
+| Bob   | 2000  |
+| Carol | NULL  |
+
+## Constraints
+
+- `employee.emp_id` and `bonus.emp_id` are primary keys.
+- `bonus.bonus` is nullable.
+
+## Tips
+
+- Start from `employee` with a `LEFT JOIN` so employees without a bonus still appear.
+- `bonus < 1000` alone excludes `NULL` bonuses — add `OR bonus.bonus IS NULL`.

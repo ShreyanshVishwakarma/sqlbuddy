@@ -1,0 +1,32 @@
+# Big Countries
+
+## Prompt
+
+A country is **big** if its area is at least **3,000,000 km²** OR its population is at least **25,000,000**.
+
+Given the `world` table below, write a query that returns the `name`, `population`, and `area` of every big country.
+
+- Thresholds are inclusive: `area >= 3000000` and `population >= 25000000`.
+- The order of the result does not matter.
+
+## Example
+
+| name   | continent | area    | population | gdp      |
+| ------ | --------- | ------- | ---------- | -------- |
+| China  | Asia      | 9600000 | 1440000000 | 14300000 |
+| Monaco | Europe    | 2       | 39000      | 7000     |
+| Nauru  | Oceania   | 21      | 10800      | 1300     |
+
+Expected result:
+
+| name  | population | area    |
+| ----- | ---------- | ------- |
+| China | 1440000000 | 9600000 |
+
+## Constraints
+
+- `world.name` is the primary key.
+
+## Tips
+
+- A simple `WHERE area >= 3000000 OR population >= 25000000` is all it takes — no `AND` anywhere.

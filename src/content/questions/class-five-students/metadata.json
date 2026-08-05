@@ -1,0 +1,37 @@
+{
+  "id": "class-five-students",
+  "slug": "class-five-students",
+  "title": "Classes With At Least 5 Students",
+  "difficulty": "easy",
+  "topics": ["GROUP BY", "HAVING"],
+  "description": "Find classes with five or more students enrolled.",
+  "concepts": ["GROUP BY", "HAVING", "COUNT"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Classes above and below the 5-student threshold."
+    },
+    {
+      "id": "exactly-five",
+      "file": "exactly-five.sql",
+      "label": "Exactly five",
+      "description": "A class with exactly five enrollments qualifies."
+    },
+    {
+      "id": "repeated-enrollments",
+      "file": "repeated-enrollments.sql",
+      "label": "Repeated rows",
+      "description": "Duplicate (student, class) rows count as separate enrollments."
+    }
+  ]
+}

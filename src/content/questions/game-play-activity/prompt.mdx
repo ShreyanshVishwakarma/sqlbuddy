@@ -1,0 +1,35 @@
+# Game Play Analysis IV
+
+## Prompt
+
+Given the `activity` table below (one row per (player, event_date)), write a query that reports the **fraction of players who logged in on the day after their first login**.
+
+- A player "returns" if they have an `event_date` exactly **one day after** their first `event_date` (their minimum date).
+- Output a single column `fraction` rounded to **2 decimal places** (`ROUND(..., 2)`).
+
+## Example
+
+| player_id | device_id | event_date | games_played |
+| --------- | --------- | ---------- | ------------ |
+| 1         | 2         | 2024-03-01 | 5            |
+| 1         | 2         | 2024-03-02 | 6            |
+| 2         | 3         | 2024-03-02 | 1            |
+| 3         | 1         | 2024-03-04 | 0            |
+
+Player 1 returns (Mar 2), player 2 does not, player 3 does not → 1/3 ≈ 0.33.
+
+Expected result:
+
+| fraction |
+| -------- |
+| 0.33     |
+
+## Constraints
+
+- The primary key is (player_id, event_date).
+- A player can have several events; only the day after their _first_ counts.
+
+## Tips
+
+- Compute each player's first date with `MIN(event_date) OVER (PARTITION BY player_id)`, then check whether `event_date = first_date + 1 day` exists for that player (`julianday(event_date) - julianday(first_date) = 1`).
+- Use a `DISTINCT` player list and a `LEFT JOIN`/`EXISTS` against the next-day condition.

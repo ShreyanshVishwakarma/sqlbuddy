@@ -129,16 +129,26 @@ src/content/questions/<slug>/
 
 `metadata.json` is validated against `src/content/schema.ts` (Zod, strict) at load time and by `npm run validate:content`.
 
-### Question catalogue (20 questions)
+### Question catalogue (36 questions)
 
 | Question                                  | Difficulty | Concepts                       |
 | ----------------------------------------- | ---------- | ------------------------------ |
+| Recyclable and Low Fat Products           | easy       | SELECT, WHERE                  |
+| Find Customer Referee                     | easy       | NULL-safe comparison           |
+| Big Countries                             | easy       | SELECT, WHERE OR               |
+| Article Views I                           | easy       | DISTINCT, ORDER BY             |
+| Invalid Tweets                            | easy       | LENGTH                         |
 | Duplicate Emails                          | easy       | GROUP BY, HAVING               |
 | Employees Earning More Than Their Manager | easy       | Self join                      |
 | Active Users Per Day                      | easy       | COUNT(DISTINCT)                |
 | Customers Without Orders                  | easy       | LEFT JOIN / NOT EXISTS         |
 | Second Highest Salary                     | easy       | Subqueries, NULL handling      |
 | Rising Temperature                        | easy       | LAG / self join                |
+| Visits Without Transactions               | easy       | LEFT JOIN anti-join            |
+| Average Process Time Per Machine          | easy       | Self join, AVG                 |
+| Employee Bonus                            | easy       | LEFT JOIN, NULL handling       |
+| Subjects Taught By Each Teacher           | easy       | COUNT(DISTINCT)                |
+| Classes With At Least 5 Students          | easy       | GROUP BY, HAVING               |
 | Nth Highest Salary                        | medium     | DENSE_RANK, aggregate wrapper  |
 | Rank Scores                               | medium     | DENSE_RANK vs RANK             |
 | Departments by Average Salary             | medium     | GROUP BY, HAVING, subqueries   |
@@ -152,6 +162,12 @@ src/content/questions/<slug>/
 | Pivot Quarterly Sales                     | medium     | Conditional aggregation        |
 | Monthly Sales Ranking                     | medium     | DENSE_RANK, PARTITION BY       |
 | Orders Gap Analysis                       | medium     | LAG, date arithmetic           |
+| Consecutive Numbers                       | medium     | LAG, consecutive detection     |
+| Exchange Seats                            | medium     | CASE WHEN, odd/even            |
+| Users With the Most Friends               | medium     | UNION ALL, MAX count           |
+| Customers Who Bought All Products         | medium     | Relational division            |
+| Immediate Food Delivery                   | medium     | ROW_NUMBER, percentage         |
+| Game Play Analysis IV                     | medium     | MIN + next-day check           |
 | Top Three Per Category                    | hard       | DENSE_RANK with ties           |
 
 ## How validation works

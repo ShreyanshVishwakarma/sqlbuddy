@@ -1,0 +1,37 @@
+{
+  "id": "find-customer-referee",
+  "slug": "find-customer-referee",
+  "title": "Find Customer Referee",
+  "difficulty": "easy",
+  "topics": ["SELECT", "WHERE", "NULL handling"],
+  "description": "Find customers who are not referred by customer id 2.",
+  "concepts": ["WHERE", "NULL comparison", "COALESCE / IS NULL"],
+  "expectedRowCount": 3,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 5000,
+    "maxOutputRows": 50
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "Customers with and without a referee."
+    },
+    {
+      "id": "many-referees",
+      "file": "many-referees.sql",
+      "label": "Many referees",
+      "description": "Referees include NULLs and several different ids."
+    },
+    {
+      "id": "all-referred",
+      "file": "all-referred.sql",
+      "label": "All referred by 2",
+      "description": "Every customer is referred by id 2; the result must be empty."
+    }
+  ]
+}

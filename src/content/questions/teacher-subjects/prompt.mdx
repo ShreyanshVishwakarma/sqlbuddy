@@ -1,0 +1,32 @@
+# Subjects Taught By Each Teacher
+
+## Prompt
+
+Given the `teacher` table below, write a query that returns, **for each teacher**, the number of **distinct subjects** they teach.
+
+- Output columns: `teacher_id` and `cnt`, ordered by `teacher_id`.
+- The table may contain duplicate (teacher, subject) rows — those count **once**.
+
+## Example
+
+| teacher_id | subject_id | dept_id |
+| ---------- | ---------- | ------- |
+| 1          | 2          | 3       |
+| 1          | 2          | 4       |
+| 1          | 3          | 3       |
+| 2          | 1          | 1       |
+
+Expected result:
+
+| teacher_id | cnt |
+| ---------- | --- |
+| 1          | 2   |
+| 2          | 1   |
+
+## Constraints
+
+- There is no primary key; the same (teacher_id, subject_id) can repeat.
+
+## Tips
+
+- `COUNT(DISTINCT subject_id)` grouped by `teacher_id` handles the duplicates for you.

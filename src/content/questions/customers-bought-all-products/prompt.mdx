@@ -1,0 +1,39 @@
+# Customers Who Bought All Products
+
+## Prompt
+
+Given the `customer` and `product` tables below, write a query that returns the `customer_id` of every customer who has bought **every product** in the `product` table.
+
+- Output a single column: `customer_id`, ordered by `customer_id`.
+- Buying a product more than once does not help — each distinct product must appear.
+
+## Example
+
+| customer_id | product_key |
+| ----------- | ----------- |
+| 1           | 5           |
+| 1           | 6           |
+| 2           | 5           |
+| 2           | 6           |
+
+| product_key |
+| ----------- |
+| 5           |
+| 6           |
+
+Expected result:
+
+| customer_id |
+| ----------- |
+| 1           |
+| 2           |
+
+## Constraints
+
+- `customer` has no primary key; the same (customer, product) pair can repeat.
+- `product.product_key` is the primary key.
+
+## Tips
+
+- Group by customer and require `COUNT(DISTINCT product_key) = (SELECT COUNT(*) FROM product)`.
+- This is the classic **relational division** problem.

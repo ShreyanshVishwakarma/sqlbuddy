@@ -1,0 +1,37 @@
+{
+  "id": "immediate-food-delivery",
+  "slug": "immediate-food-delivery",
+  "title": "Immediate Food Delivery",
+  "difficulty": "medium",
+  "topics": ["Window Functions", "Subqueries", "Aggregation"],
+  "description": "Report the percentage of customers' first orders that were delivered immediately.",
+  "concepts": ["ROW_NUMBER", "Window functions", "Percentage", "julianday"],
+  "expectedRowCount": 1,
+  "validation": {
+    "orderMatters": false,
+    "columnNamesMatter": false,
+    "allowedStatements": ["SELECT", "WITH"],
+    "maxExecutionTimeMs": 6000,
+    "maxOutputRows": 100
+  },
+  "fixtures": [
+    {
+      "id": "base",
+      "file": "base.sql",
+      "label": "Basic dataset",
+      "description": "A mix of immediate and scheduled first orders."
+    },
+    {
+      "id": "all-immediate",
+      "file": "all-immediate.sql",
+      "label": "All immediate",
+      "description": "Every first order is immediate: 100%."
+    },
+    {
+      "id": "none-immediate",
+      "file": "none-immediate.sql",
+      "label": "None immediate",
+      "description": "No first order is immediate: 0%."
+    }
+  ]
+}
