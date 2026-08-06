@@ -121,6 +121,16 @@ test.describe("practice workspace", () => {
     await expect(page.getByText(/Not quite/)).toBeVisible({ timeout: 30000 });
   });
 
+  test("Ctrl+' runs the query without submitting", async ({ page }) => {
+    await setEditorSql(page, "SELECT 42 AS answer");
+    await page.getByLabel("Notes").click();
+    await page.keyboard.press("Control+'");
+    // It runs: the result cell renders.
+    await expect(page.getByRole("cell", { name: "42" }).first()).toBeVisible({ timeout: 15000 });
+    // It does not submit: no pass/fail verdict appears.
+    await expect(page.getByText(/Passed|Not quite/)).toBeHidden();
+  });
+
   test("submits an incorrect solution and fails without revealing fixtures", async ({ page }) => {
     await setEditorSql(page, "SELECT 999 AS second_highest_salary");
     await page.getByRole("button", { name: "Submit" }).click();

@@ -29,6 +29,7 @@ interface SqlEditorProps {
 /**
  * Monaco SQL editor. Keyboard shortcuts:
  * - Ctrl/Cmd + Enter: run query
+ * - Ctrl/Cmd + ' (apostrophe): run query
  * - Ctrl/Cmd + Shift + Enter: submit answer
  */
 export function SqlEditor({ value, onChange, onRun, onSubmit, disabled }: SqlEditorProps) {
@@ -45,6 +46,7 @@ export function SqlEditor({ value, onChange, onRun, onSubmit, disabled }: SqlEdi
   const handleEditorMount = useCallback<NonNullable<EditorProps["onMount"]>>(
     (editor, monaco) => {
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => onRunRef.current());
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Quote, () => onRunRef.current());
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter, () =>
         onSubmitRef.current(),
       );
@@ -73,11 +75,26 @@ export function SqlEditor({ value, onChange, onRun, onSubmit, disabled }: SqlEdi
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       const mod = e.ctrlKey || e.metaKey;
-      if (!mod || !e.shiftKey || e.key !== "Enter") return;
+      if (!mod) return;
       if ((e.target as HTMLElement | null)?.closest?.(".monaco-editor")) return;
       if (disabled) return;
-      e.preventDefault();
-      onSubmitRef.current();
+
+      // Ctrl/Cmd + Enter or Ctrl/Cmd + ' runs the query.
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        onRunRef.current();
+        return;
+      }
+      if (e.key === "'") {
+        e.preventDefault();
+        onRunRef.current();
+        return;
+      }
+      // Ctrl/Cmd + Shift + Enter submits the answer.
+      if (e.key === "Enter" && e.shiftKey) {
+        e.preventDefault();
+        onSubmitRef.current();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
