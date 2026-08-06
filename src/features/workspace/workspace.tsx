@@ -18,6 +18,7 @@ import {
   saveNotes,
 } from "@/lib/store/db";
 import { SqlEditor } from "./sql-editor";
+import { ResizableSplit } from "@/components/resizable-split";
 import { SchemaExplorer } from "./schema-explorer";
 import {
   ResultsEmpty,
@@ -318,77 +319,79 @@ export function SqlWorkspace({ question, nextSlug }: WorkspaceProps) {
       </div>
 
       {/* Body */}
-      <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(280px,340px)_1fr]">
-        {/* Left panel */}
-        <aside className="border-border bg-surface min-h-0 overflow-y-auto border-b lg:border-r lg:border-b-0">
-          <section className="border-border border-b p-5">
-            <Markdown source={question.promptMdx} />
-          </section>
-          <section className="border-border border-b">
-            <SchemaExplorer
-              tables={tables}
-              onPreviewTable={(tableName, limit) => {
-                const client = clientRef.current;
-                if (!client) throw new Error("SQLite engine not ready.");
-                return client.previewTable(tableName, limit);
-              }}
-            />
-          </section>
-          <section className="p-5">
-            <label
-              className="text-muted mb-1.5 block text-xs font-semibold tracking-widest uppercase"
-              htmlFor="question-notes"
-            >
-              Notes
-            </label>
-            <textarea
-              id="question-notes"
-              value={notes}
-              onChange={(e) => handleNotesChange(e.target.value)}
-              placeholder="Your private notes for this question…"
-              rows={4}
-              className="border-border bg-surface-muted text-foreground placeholder:text-muted focus:border-accent w-full resize-y rounded-md border p-2.5 text-sm focus:outline-none"
-            />
-          </section>
-        </aside>
-
-        {/* Main panel */}
-        <main className="bg-surface flex min-h-0 flex-col">
-          <div className="border-border min-h-0 flex-1 border-b">
-            <SqlEditor
-              value={editorValue}
-              onChange={handleEditorChange}
-              onRun={() => void handleRun()}
-              onSubmit={() => void handleSubmit()}
-              disabled={answerVisible}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <div className="border-border bg-surface h-52 shrink-0 border-b">
-              {runError ? (
-                <ResultsError message={runError} />
-              ) : results ? (
-                <ResultsGrid results={results} />
-              ) : running ? (
-                <ResultsSkeleton />
-              ) : engine === "initializing" ? (
-                <ResultsSkeleton />
-              ) : (
-                <ResultsEmpty />
-              )}
-            </div>
-            <div className="px-4 py-2.5">
-              <SubmissionPanel
-                status={submission}
-                result={validation}
-                nextSlug={nextSlug}
-                onNext={goToNext}
+      <ResizableSplit
+        handleLabel="Resize question panel"
+        side={
+          <>
+            <section className="border-border border-b p-5">
+              <Markdown source={question.promptMdx} />
+            </section>
+            <section className="border-border border-b">
+              <SchemaExplorer
+                tables={tables}
+                onPreviewTable={(tableName, limit) => {
+                  const client = clientRef.current;
+                  if (!client) throw new Error("SQLite engine not ready.");
+                  return client.previewTable(tableName, limit);
+                }}
+              />
+            </section>
+            <section className="p-5">
+              <label
+                className="text-muted mb-1.5 block text-xs font-semibold tracking-widest uppercase"
+                htmlFor="question-notes"
+              >
+                Notes
+              </label>
+              <textarea
+                id="question-notes"
+                value={notes}
+                onChange={(e) => handleNotesChange(e.target.value)}
+                placeholder="Your private notes for this question…"
+                rows={4}
+                className="border-border bg-surface-muted text-foreground placeholder:text-muted focus:border-accent w-full resize-y rounded-md border p-2.5 text-sm focus:outline-none"
+              />
+            </section>
+          </>
+        }
+        main={
+          <>
+            <div className="border-border min-h-0 flex-1 border-b">
+              <SqlEditor
+                value={editorValue}
+                onChange={handleEditorChange}
+                onRun={() => void handleRun()}
+                onSubmit={() => void handleSubmit()}
+                disabled={answerVisible}
               />
             </div>
-          </div>
-        </main>
-      </div>
+
+            <div className="flex flex-col">
+              <div className="border-border bg-surface h-52 shrink-0 border-b">
+                {runError ? (
+                  <ResultsError message={runError} />
+                ) : results ? (
+                  <ResultsGrid results={results} />
+                ) : running ? (
+                  <ResultsSkeleton />
+                ) : engine === "initializing" ? (
+                  <ResultsSkeleton />
+                ) : (
+                  <ResultsEmpty />
+                )}
+              </div>
+              <div className="px-4 py-2.5">
+                <SubmissionPanel
+                  status={submission}
+                  result={validation}
+                  nextSlug={nextSlug}
+                  onNext={goToNext}
+                />
+              </div>
+            </div>
+          </>
+        }
+      />
     </div>
   );
 }

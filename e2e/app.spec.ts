@@ -113,6 +113,14 @@ test.describe("practice workspace", () => {
     await expect(page.getByText(/Passed/)).toBeVisible({ timeout: 30000 });
   });
 
+  test("Ctrl+Shift+Enter submits from outside the editor", async ({ page }) => {
+    await setEditorSql(page, "SELECT 999 AS second_highest_salary");
+    // Focus lives in the notes textarea, not the Monaco editor.
+    await page.getByLabel("Notes").click();
+    await page.keyboard.press("Control+Shift+Enter");
+    await expect(page.getByText(/Not quite/)).toBeVisible({ timeout: 30000 });
+  });
+
   test("submits an incorrect solution and fails without revealing fixtures", async ({ page }) => {
     await setEditorSql(page, "SELECT 999 AS second_highest_salary");
     await page.getByRole("button", { name: "Submit" }).click();

@@ -34,3 +34,6 @@ yarn-error.log*
 
 # tool-local state (command-code taste/preferences)
 .commandcode/
+
+# local reports & scratch
+why_so_fast.md
